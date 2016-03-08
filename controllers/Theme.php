@@ -18,7 +18,17 @@ class Theme extends Controller {
         Session::set('theme_page', '/theme/show-theme/' . $theme_id);
         
         $this->view->setViewData('theme', $this->model->getThemeById($theme_id));
-        $this->view->setViewData('subthemes', $this->model->getAllSubthemesByTheme($theme_id));
+        $subthemes = $this->model->getAllSubthemesByTheme($theme_id);
+        $this->view->setViewData('subthemes', $subthemes);
+        // Alle Meinungen der Subthemes auslesen und speichern
+        $options = array();
+        foreach ($subthemes as $subtheme){
+            $options[$subtheme['id']] = $this->model->getOpinionsBySubtheme($subtheme['id']);
+        }
+        
+        var_dump($options);
+        
+        $this->view->setViewData('opinions', $options);
         $this->setViewFile('show_theme');
     }
 

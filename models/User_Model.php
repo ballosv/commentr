@@ -21,12 +21,13 @@ class User_Model extends Model {
              */
             
             // Meinung speichern
-            $query = $this->db->prepare("INSERT INTO opinions (theme_id, user_id, title, text) VALUES (:theme_id, :user_id, :title, :text)");
+            $query = $this->db->prepare("INSERT INTO opinions (theme_id, user_id, title, text, status) VALUES (:theme_id, :user_id, :title, :text, :status)");
             $save = $query->execute(array(
                 ':theme_id' => $themeId,
                 ':user_id' => $userId,
                 ':title' => $title,
-                ':text' => $text
+                ':text' => $text,
+                ':status' => 1
             ));
             
             /*
