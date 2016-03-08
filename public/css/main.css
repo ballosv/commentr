@@ -1,0 +1,60 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    list-style: none;
+}
+
+body{
+    
+}
+
+.inner-wrap{
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+#page-header{
+    border: 1px solid black;
+}
+
+#page-nav ul{
+    overflow: hidden;
+    display: inline-block;
+    margin: 0 auto;
+}
+
+#page-nav li{
+    float: left;
+    margin: 0 10px;
+}
+
+main{
+    border: 1px solid black;
+}
+
+#page-footer{
+    border: 1px solid black;
+}
+
+#theme-list ul{
+    overflow: hidden;
+}
+
+.theme{
+    float: left;
+    border: 1px solid black;
+    padding: 5px;
+    width: 200px;
+    min-height: 250px;
+    text-align: center;
+}
+
+#debug{
+    border: 1px solid red;
+}
+
+#debug *{
+    font-size: 10px;
+}
