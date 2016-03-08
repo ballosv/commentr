@@ -39,8 +39,20 @@ class Model {
         }
     }
     
-    public function getOpinionsBySubtheme(){
+    public function getOpinionsBySubtheme($theme_id){
+        Debug::addMsg('Alle Meinungen eines Unterthemas werden geladen');
+        $query = $this->db->prepare("SELECT * FROM opinions WHERE theme_id = :theme_id AND status = 1 ORDER BY date");
+        $query->execute(array(
+            ':theme_id' => $theme_id
+        ));
         
+        $data = $query->fetchAll();
+        
+        $rowCount = $query->rowCount();
+        
+        if($rowCount > 0){
+            return $data;
+        }
     }
     
     public function getAllCategories(){
