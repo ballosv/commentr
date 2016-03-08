@@ -16,7 +16,7 @@ define('PUBLIC_URL', BASE_URL . DIRECTORY_SEPARATOR . 'public');
 
 // Datenbank
 define('DB_TYPE', 'mysql');
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'work_commentr_v01');
-define('DB_USER', 'user_db_commentr');
-define('DB_PASS', 'T3mpP455w0rtD4m1t3sN1chtG3kn4cktw1rd');
+define('DB_HOST', 'WP354.WEBPACK.HOSTEUROPE.DE');
+define('DB_NAME', 'db10715138-commentr');
+define('DB_USER', 'db10715138-comtr');
+define('DB_PASS', 'T3mpP455w0rt');
