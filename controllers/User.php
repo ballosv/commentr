@@ -23,14 +23,13 @@ class User extends Controller {
     }
     
     public function createNewOpinion($param){
-        header('Location: ' . BASE_URL);
-//        $saveOpinion = $this->model->createNewOpinion($param[0]);
-//        
-//        if($saveOpinion === true){
-//            header('Location: ' . BASE_URL . Session::get('theme_page'));
-//        }else{
-//            header('Location: ' . BASE_URL . '/error/error-save-opinion');
-//        }
+        $saveOpinion = $this->model->createNewOpinion($param[0]);
+
+        if($saveOpinion === true){
+            header('Location: ' . BASE_URL . Session::get('theme_page'));
+        }else{
+            header('Location: ' . BASE_URL . '/error/error-save-opinion');
+        }
     }
 
 }

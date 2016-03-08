@@ -31,7 +31,7 @@ class Error extends Controller{
     
     public function errorSaveOpinion(){
         $this->setViewFile('error_save_opinion');
-        $this->view->setViewData('Beim Speichern deiner Meinung ist ein Fehler aufgetreten');
+        $this->view->setViewData('error', 'Beim Speichern deiner Meinung ist ein Fehler aufgetreten');
     }
 
 }
