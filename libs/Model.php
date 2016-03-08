@@ -39,6 +39,10 @@ class Model {
         }
     }
     
+    public function getOpinionsBySubtheme(){
+        
+    }
+    
     public function getAllCategories(){
         Debug::addMsg('Alle Kategorien werden geladen');
         $query = $this->db->prepare("SELECT * FROM categories");

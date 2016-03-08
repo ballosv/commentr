@@ -13,34 +13,34 @@ class User_Model extends Model {
         $text = filter_input(INPUT_POST, 'opinion-text', FILTER_SANITIZE_STRING);
         $userId = Session::get('user_id');
         
-//        try {
-//            // Startet die Warteschleife
-//            $this->db->beginTransaction();
-//            /*
-//             * START Queries
-//             */
-//            
-//            // Meinung speichern
-//            $query = $this->db->prepare("INSERT INTO opinions (theme_id, user_id, title, text) VALUES (:theme_id, :user_id, title, text)");
-//            $save = $query->execute(array(
-//                ':theme_id' => $themeId,
-//                ':user_id' => $userId,
-//                ':title' => $title,
-//                ':text' => $text
-//            ));
-//            
-//            /*
-//             * END Queries
-//             */
-//            
-//            // Durchführen der Warteschleife
-//            $this->db->commit();
-//        } catch (PDOException $ex) {
-//            // Wenn es Fehler gab, Vorgänge rückgängig machen
-//            $this->db->rollback();
-//        }
-//        
-//        return $save;
+        try {
+            // Startet die Warteschleife
+            $this->db->beginTransaction();
+            /*
+             * START Queries
+             */
+            
+            // Meinung speichern
+            $query = $this->db->prepare("INSERT INTO opinions (theme_id, user_id, title, text) VALUES (:theme_id, :user_id, :title, :text)");
+            $save = $query->execute(array(
+                ':theme_id' => $themeId,
+                ':user_id' => $userId,
+                ':title' => $title,
+                ':text' => $text
+            ));
+            
+            /*
+             * END Queries
+             */
+            
+            // Durchführen der Warteschleife
+            $this->db->commit();
+        } catch (PDOException $ex) {
+            // Wenn es Fehler gab, Vorgänge rückgängig machen
+            $this->db->rollback();
+        }
+        
+        return $save;
         
     }
 
