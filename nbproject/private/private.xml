@@ -10,6 +10,14 @@
             <file>file:/Users/ballosv/Google%20Drive/_WORK/commentr/v01/controllers/User.php</file>
             <file>file:/Users/ballosv/Google%20Drive/_WORK/commentr/v01/models/User_Model.php</file>
         </group>
-        <group name="commentr"/>
+        <group name="commentr">
+            <file>file:/Users/ballosv/_git_projects/commentr/controllers/Error.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/controllers/User.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/models/User_Model.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/config.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/models/Admin_Model.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/controllers/Theme.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/libs/Model.php</file>
+        </group>
     </open-files>
 </project-private>
