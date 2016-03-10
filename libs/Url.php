@@ -70,16 +70,20 @@ class Url {
         }
     }
     
-    public static function getUrl(){
-//        $params;
+    public static function printUrl($format = false){
         
         if(!empty(self::getParams())){
             
-            foreach (self::getParams('lc') as $param){
+            foreach (self::getParams('lcc') as $param){
                 $params .= '/' . $param;
             }
         }
-        return BASE_URL . DIRECTORY_SEPARATOR . self::getController() . DIRECTORY_SEPARATOR . self::getMethod('lc') . $params;
+        
+        if($format === true){
+            return DIRECTORY_SEPARATOR . self::getController() . DIRECTORY_SEPARATOR . self::getMethod('lcc') . $params;
+        }
+        
+        return BASE_URL . DIRECTORY_SEPARATOR . self::getController() . DIRECTORY_SEPARATOR . self::getMethod('lcc') . $params;
     }
     
     public static function parseUrl(){
@@ -106,6 +110,66 @@ class Url {
             unset($url[1]);
             self::setParams(array_values($url));
         }
+    }
+    
+    public static function setRedirectPage($url = false){
+        $url = ($url === false) ? self::printUrl(true) : $url;
+        Session::set('redirect_page', $url);
+    }
+    
+    public static function getRedirectPage($format = false){
+        if($format === true){
+            return Session::get('redirect_page');
+        }
+        
+        return BASE_URL . Session::get('redirect_page');
+    }
+    
+    public static function unsetRedirectPage(){
+        Session::unsetKey('redirect_page');
+    }
+    
+    public static function setLastPage($url = false){
+        $url = ($url === false) ? self::printUrl(true) : $url;
+        Session::set('last_page', $url);
+    }
+    
+    public static function getLastPage($format = false){
+        if($format === true){
+            return Session::get('last_page');
+        }
+        
+        return BASE_URL . Session::get('last_page');
+    }
+    
+    public static function getParamsFromLastPage(){
+        $url = ltrim(self::getLastPage(true), '/');
+        $url = rtrim($url, '/');
+        $parts = explode('/', $url);
+        unset($parts[0]);
+        unset($parts[1]);
+        $parts = array_values($parts);
+        
+        return $parts;
+    }
+    
+    public static function setTempUrl($name, $url){
+        Session::set($name, $url);
+    }
+    
+    public static function getTempUrl($name, $format = false){
+        $tempUrl = Session::get($name);
+        
+        if($format === true){
+            return $tempUrl;
+        }
+        
+        return BASE_URL . $tempUrl;
+        
+    }
+    
+    public static function unsetTempUrl($name){
+        Session::unsetKey($name);
     }
 
 //    public static function setUrlInSession($key, $url){

@@ -6,4 +6,4 @@
     <br />
     <input type='submit' value='Meinung abgeben' />
 </form>
-<a href="<?= BASE_URL . Session::get('theme_page'); ?>">zurück</a>
+<a href="<?= Url::getTempUrl('theme_page'); ?>">zurück</a>

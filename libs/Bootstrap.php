@@ -9,8 +9,11 @@ class Bootstrap {
     function __construct() {
         // Eine Session starten, damit sie überall verfügbar ist
         Session::init();
-        
         Url::parseUrl();
+        
+        Debug::addMsg('REDIRECT_URL: ' . $_SERVER['REDIRECT_URL']);
+        Debug::addMsg('QUERY_STRING: ' . $_SERVER['QUERY_STRING']);
+        Debug::addMsg('REQUEST_URI: ' . $_SERVER['REQUEST_URI']);
         
         if(empty(Url::getController())){
             Url::setController('index');
@@ -116,7 +119,8 @@ class Bootstrap {
 //        }
 //        echo Url::parseUrl();
         // Nachdem die Controller-Methode ausgeführt wurde, die index-Methode für die Anzeige ausführen
-        $controller->index();        
+        $controller->index();
+        Url::setLastPage();
     }
 
 //    protected function parseUrl(){
