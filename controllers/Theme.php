@@ -26,7 +26,7 @@ class Theme extends Controller {
             $options[$subtheme['id']] = $this->model->getOpinionsBySubtheme($subtheme['id']);
         }
         
-        var_dump($options);
+//        var_dump($options);
         
         $this->view->setViewData('opinions', $options);
         $this->setViewFile('show_theme');
