@@ -26,7 +26,7 @@ class User extends Controller {
         $saveOpinion = $this->model->createNewOpinion($param[0]);
 
         if($saveOpinion === true){
-            header('Location: ' . BASE_URL . Session::get('theme_page'));
+            header('Location: ' . Url::getTempUrl('theme_page'));
         }else{
             header('Location: ' . BASE_URL . '/error/error-save-opinion');
         }

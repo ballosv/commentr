@@ -28,8 +28,10 @@ class Login extends Controller{
                 }
                 
                 if(Session::get('user_role') == 0){
-                    if(!empty(Session::get('next_page'))){
-                        header('Location: ' . BASE_URL . Session::get('next_page'));
+                    if(!empty(Url::getRedirectPage())){
+                        $redirect = Url::getRedirectPage();
+                        Url::unsetRedirectPage();
+                        header('Location: ' . $redirect);
                         exit;
                     }
                     header('Location: ' . BASE_URL . '/user');
