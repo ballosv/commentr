@@ -12,7 +12,7 @@
         <li class="theme">
             <h2><?= $theme['name']; ?></h2>
             <p><?= $theme['teaser']; ?></p>
-            <a href="<?= BASE_URL . '/admin/deactivate-theme/' . $theme['id']; ?>">Deaktivieren</a>
+            <a href="<?= BASE_URL . '/admin/deactivate-theme/' . $theme['link']; ?>">Deaktivieren</a>
         </li>
         <?php endforeach; ?>
     </ul>

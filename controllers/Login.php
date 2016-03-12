@@ -29,7 +29,7 @@ class Login extends Controller{
                 
                 if(Session::get('user_role') == 0){
                     if(!empty(Url::getRedirectPage())){
-                        $redirect = Url::getRedirectPage();
+                        $redirect = html_entity_decode(Url::getRedirectPage());
                         Url::unsetRedirectPage();
                         header('Location: ' . $redirect);
                         exit;

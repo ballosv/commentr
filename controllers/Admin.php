@@ -28,7 +28,7 @@ class Admin extends Controller {
     public function createNewTheme(){
         $saveTheme = $this->model->createNewTheme();
         if($saveTheme === true){
-            header('Location: ' . BASE_URL . '/admin/new-theme');
+            header('Location: ' . BASE_URL . '/admin');
         }
         else{
             header('Location: ' . BASE_URL . '/error/error-save-theme');

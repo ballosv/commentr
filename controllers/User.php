@@ -5,6 +5,9 @@ class User extends Controller {
     function __construct() {
         parent::__construct();
         Debug::addMsg('User-Controller geladen');
+        if(Url::getRedirectPage()){
+            Url::setRedirectPage(Url::printUrl(true));
+        }
         
         if($this->loginStatus == false || $this->userRole !== 0){
 //            Session::destroy();
@@ -18,12 +21,15 @@ class User extends Controller {
     }
     
     public function newOpinion($param){
-        $this->view->setViewData('theme_id', $param[0]);
+        $this->view->setViewData('theme_link', $param[0]);
+        $this->view->setViewData('subtheme_link', $param[1]);
+        $subtheme = $this->model->getThemeByLink($param[1]);
+        $this->view->setViewData('subtheme_id', $subtheme['id']);
         $this->setViewFile('new_opinion');
     }
     
-    public function createNewOpinion($param){
-        $saveOpinion = $this->model->createNewOpinion($param[0]);
+    public function createNewOpinion($params){
+        $saveOpinion = $this->model->createNewOpinion($params[0]);
 
         if($saveOpinion === true){
             header('Location: ' . Url::getTempUrl('theme_page'));

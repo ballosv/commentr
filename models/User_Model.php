@@ -7,10 +7,12 @@ class User_Model extends Model {
         Debug::addMsg('User_Model wurde geladen');
     }
     
-    public function createNewOpinion($themeId){
+    public function createNewOpinion($theme_link){
+        
         Debug::addMsg('Neue Meinung wird gespeichert');
         $title = filter_input(INPUT_POST, 'opinion-title', FILTER_SANITIZE_STRING);
         $text = filter_input(INPUT_POST, 'opinion-text', FILTER_SANITIZE_STRING);
+        $themeId = filter_input(INPUT_POST, 'subtheme_id', FILTER_SANITIZE_STRING);
         $userId = Session::get('user_id');
         
         try {

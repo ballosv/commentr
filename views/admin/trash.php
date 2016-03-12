@@ -8,7 +8,7 @@
         <li class="theme">
             <h2><?= $theme['name']; ?></h2>
             <p><?= $theme['teaser']; ?></p>
-            <a href="<?= BASE_URL . '/admin/activate-theme/' . $theme['id']; ?>">aktivieren</a>
+            <a href="<?= BASE_URL . '/admin/activate-theme/' . $theme['link']; ?>">aktivieren</a>
         </li>
         <?php endforeach; ?>
     </ul>
