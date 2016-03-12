@@ -10,17 +10,20 @@ class Bootstrap {
         // Eine Session starten, damit sie überall verfügbar ist
         Session::init();
         Url::parseUrl();
+//        var_dump(Url::getParams());
+//        Debug::addMsg('REDIRECT_URL: ' . $_SERVER['REDIRECT_URL']);
+//        Debug::addMsg('QUERY_STRING: ' . $_SERVER['QUERY_STRING']);
+//        Debug::addMsg('REQUEST_URI: ' . $_SERVER['REQUEST_URI']);
         
-        Debug::addMsg('REDIRECT_URL: ' . $_SERVER['REDIRECT_URL']);
-        Debug::addMsg('QUERY_STRING: ' . $_SERVER['QUERY_STRING']);
-        Debug::addMsg('REQUEST_URI: ' . $_SERVER['REQUEST_URI']);
-        
+        // Wenn kein Controller übergeben wurde auf Standard-Controller schalten
         if(empty(Url::getController())){
             Url::setController('index');
         }
 
-        Debug::addMsg('Controller: ' . Url::getController());
-        Debug::addMsg('Methode: ' . Url::getMethod());
+//        Debug::addMsg('Controller: ' . Url::getController());
+//        Debug::addMsg('Methode: ' . Url::getMethod());
+//        Debug::addMsg('Parameter-1: ' . Url::getParams()[0]);
+//        Debug::addMsg('Parameter-2: ' . Url::getParams()[1]);
 
         // Prüfen ob es den Controller gibt
         if (!file_exists(CONTROLLER_PATH . DIRECTORY_SEPARATOR . Url::getController('uc') . '.php')) {

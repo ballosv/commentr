@@ -11,7 +11,7 @@ $opinions = $this->getViewData('opinions');
     <li>
         <h2><?= $subtheme['name']; ?></h2>
         <p><?= $subtheme['date']; ?></p>
-        <a href="<?= BASE_URL . '/user/new-opinion/' . $subtheme['id']; ?>">Deine Meinung</a>
+        <a href="<?= BASE_URL . '/user/new-opinion/' . $theme['link'] . '/' . $subtheme['link']; ?>">Deine Meinung</a>
         <?php if(!empty($this->getViewData('opinions'))): ?>
         <ul>
             <?php foreach( $opinions[$subtheme['id']] as $data): ?>

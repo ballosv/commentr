@@ -99,6 +99,30 @@ class Model {
         }
     }
     
+    public function getThemeByLink($link){
+        Debug::addMsg('Ein Thema wird geladen');
+        
+        $query = $this->db->prepare("SELECT * FROM themes WHERE link = :link AND status = 1 LIMIT 1");
+        $query->execute(array(
+            'link' => $link
+        ));
+        
+        $data = $query->fetchAll();
+        
+        $rowCount = $query->rowCount();
+        
+        if($rowCount > 0){
+            return $data[0];
+        }
+    }
+    
+    public function clear_string($str, $how = '-'){
+        $search = array("ä", "ö", "ü", "ß", "Ä", "Ö", "Ü");
+        $replace = array("ae", "oe", "ue", "ss", "Ae", "Oe", "Ue");
+        $str = str_replace($search, $replace, $str);
+        $str = strtolower(preg_replace("/[^a-zA-Z0-9]+/", trim($how), $str));
+        return $str;
+}
     
 
 }

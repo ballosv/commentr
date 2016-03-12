@@ -23,8 +23,9 @@ class Admin_Model extends Model {
              */
             
             // Thema speichern
-            $query = $this->db->prepare("INSERT INTO themes (name, teaser, parent, status) VALUES (:name, :teaser, :parent, :status)");
+            $query = $this->db->prepare("INSERT INTO themes (link, name, teaser, parent, status) VALUES (:link, :name, :teaser, :parent, :status)");
             $save = $query->execute(array(
+                ':link' => self::clear_string($themeTitle),
                 ':name' => $themeTitle,
                 ':teaser' => $themeTeaser,
                 ':parent' => $themeParent,
@@ -55,7 +56,7 @@ class Admin_Model extends Model {
         return $save;
     }
     
-    public function deactivateTheme($themeId){
+    public function deactivateTheme($themeLink){
         Debug::addMsg('Thema wird deaktiviert');
         // Neues Thema in Datenbank schreiben und Kategorie abspeichern
         try {
@@ -66,9 +67,9 @@ class Admin_Model extends Model {
              */
             
             // Thema löschen
-            $query = $this->db->prepare("UPDATE themes SET status = 0 WHERE id = :theme_id");
+            $query = $this->db->prepare("UPDATE themes SET status = 0 WHERE link = :link");
             $deactivate = $query->execute(array(
-                ':theme_id' => $themeId
+                ':link' => $themeLink
             ));
             
             /*
@@ -85,7 +86,7 @@ class Admin_Model extends Model {
         return $deactivate;
     }
     
-    public function activateTheme($themeId){
+    public function activateTheme($themeLink){
         Debug::addMsg('Thema wird aktiviert');
         // Neues Thema in Datenbank schreiben und Kategorie abspeichern
         try {
@@ -96,9 +97,9 @@ class Admin_Model extends Model {
              */
             
             // Thema löschen
-            $query = $this->db->prepare("UPDATE themes SET status = 1 WHERE id = :theme_id");
+            $query = $this->db->prepare("UPDATE themes SET status = 1 WHERE link = :link");
             $activate = $query->execute(array(
-                ':theme_id' => $themeId
+                ':link' => $themeLink
             ));
             
             /*

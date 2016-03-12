@@ -16,7 +16,7 @@ class Url {
             $output = $param[0];
             unset($param[0]);
             foreach ($param as $val){
-                $output .= htmlentities(ucfirst($val));
+                $output .= ucfirst($val);
             }
             
             return $output;
@@ -37,7 +37,7 @@ class Url {
             $output = $param[0];
             unset($param[0]);
             foreach ($param as $val){
-                $output .= htmlentities(ucfirst($val));
+                $output .= ucfirst($val);
             }
             
             return $output;
@@ -61,7 +61,7 @@ class Url {
                 $output = $param[0];
                 unset($param[0]);
                 foreach ($param as $val){
-                    $output .= htmlentities(ucfirst($val));
+                    $output .= ucfirst($val);
                 }
                 $params[] = $output;
             }
@@ -74,7 +74,7 @@ class Url {
         
         if(!empty(self::getParams())){
             
-            foreach (self::getParams('lcc') as $param){
+            foreach (self::getParams() as $param){
                 $params .= '/' . $param;
             }
         }
@@ -108,7 +108,12 @@ class Url {
             unset($url[0]);
             self::setMethod($url[1]);
             unset($url[1]);
-            self::setParams(array_values($url));
+            
+            $url = array_values($url);
+            foreach ($url as $val){
+                $params[] = $val;
+            }
+            self::setParams($params);
         }
     }
     
