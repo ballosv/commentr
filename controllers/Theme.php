@@ -4,7 +4,7 @@ class Theme extends Controller {
 
     function __construct() {
         parent::__construct();
-        Debug::addMsg('Theme-Controller wurde geladen');
+Debug::addMsg('Theme-Controller wurde geladen');
     }
     
     public function index(){
@@ -31,13 +31,25 @@ class Theme extends Controller {
 //        $redirectUrl = '/user/new-opinion/' . $theme['link'] . '/' . $link;
 //        Url::setRedirectPage($redirectUrl);
         
-        // Alle Meinungen der Subthemes auslesen und speichern
+        // Alle Meinungen und Kommentare der Subthemes auslesen und speichern
         $opinions = array();
+        $AllOpinionsWithComments = array();
+        $commments = array();
         foreach ($subthemes as $subtheme){
             $opinions[$subtheme['id']] = $this->model->getOpinionsBySubtheme($subtheme['id']);
+            $opinionsWidthComments = $this->model->getCommentedOpinionsBySubtheme($subtheme['id'], '');
+            if($opinionsWidthComments !== NULL){
+                $AllOpinionsWithComments[$subtheme['id']] = $opinionsWidthComments;
+            }
+            // Kommentare auslesen
+            foreach ($AllOpinionsWithComments[$subtheme['id']] as $opinion){
+                $commments[$opinion['id']] = $this->model->getCommentsBySubtheme($opinion['id']);
+            }
         }
+        
         $this->view->setViewData('opinions', $opinions);
-//        var_dump($opinions);
+        $this->view->setViewData('comments', $commments);
+        
         $this->setViewFile('show_theme');
     }
 

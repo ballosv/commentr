@@ -4,7 +4,7 @@ class Login_Model extends Model{
 
     function __construct() {
         parent::__construct();
-        Debug::addMsg('Login_Model wurde geladen');
+Debug::addMsg('Login_Model wurde geladen');
         
     }
     

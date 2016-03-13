@@ -4,11 +4,11 @@ class Admin_Model extends Model {
 
     function __construct() {
         parent::__construct();
-        Debug::addMsg('Admin_Model wurde geladen');
+Debug::addMsg('Admin_Model wurde geladen');
     }
     
     public function createNewTheme(){
-        Debug::addMsg('Neues Thema wird erstellt');
+Debug::addMsg('Neues Thema wird erstellt');
         $themeTitle = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $themeTeaser = filter_input(INPUT_POST, 'teaser', FILTER_SANITIZE_STRING);
         $themeParent = filter_input(INPUT_POST, 'parent-theme', FILTER_SANITIZE_STRING);
@@ -25,7 +25,7 @@ class Admin_Model extends Model {
             // Thema speichern
             $query = $this->db->prepare("INSERT INTO themes (link, name, teaser, parent, status) VALUES (:link, :name, :teaser, :parent, :status)");
             $save = $query->execute(array(
-                ':link' => self::clear_string($themeTitle),
+                ':link' => self::clearString($themeTitle),
                 ':name' => $themeTitle,
                 ':teaser' => $themeTeaser,
                 ':parent' => $themeParent,
@@ -57,7 +57,7 @@ class Admin_Model extends Model {
     }
     
     public function deactivateTheme($themeLink){
-        Debug::addMsg('Thema wird deaktiviert');
+Debug::addMsg('Thema wird deaktiviert');
         // Neues Thema in Datenbank schreiben und Kategorie abspeichern
         try {
             // Startet die Warteschleife
@@ -87,7 +87,7 @@ class Admin_Model extends Model {
     }
     
     public function activateTheme($themeLink){
-        Debug::addMsg('Thema wird aktiviert');
+Debug::addMsg('Thema wird aktiviert');
         // Neues Thema in Datenbank schreiben und Kategorie abspeichern
         try {
             // Startet die Warteschleife
@@ -117,7 +117,7 @@ class Admin_Model extends Model {
     }
     
     public function getAllDeactivatedThemes(){
-        Debug::addMsg('Alle deaktivierten Themes anzeigen ');
+Debug::addMsg('Alle deaktivierten Themes anzeigen ');
         try {
             // Startet die Warteschleife
             $this->db->beginTransaction();
@@ -128,7 +128,7 @@ class Admin_Model extends Model {
             // Thema löschen
             $query = $this->db->prepare("SELECT * FROM themes WHERE status = 0");
             $query->execute();
-            $data = $query->fetchAll();
+            $data = $query->fetchAll(FETCH_MODE);
             
             /*
              * END Queries

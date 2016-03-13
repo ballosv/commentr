@@ -18,7 +18,7 @@ class Controller {
     protected $loginStatus;
             
     function __construct() {
-        Debug::addMsg('Base-Controller gestartet');
+Debug::addMsg('Base-Controller gestartet');
         
         // Instanz der View-Klasse erstellen
         $this->view = new View();
@@ -30,10 +30,10 @@ class Controller {
     
     // Model einbinden, wenn eines vorhanden ist
     public function loadModel($modelName){
-        $model = ucfirst($modelName) . '_Model';
+        $model = $modelName . '_Model';
         $modelPath = MODEL_PATH . DIRECTORY_SEPARATOR . $model . '.php';
         if(file_exists($modelPath)){
-            require $modelPath;
+            require_once $modelPath;
             $this->model = new $model();
         }
     }

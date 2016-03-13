@@ -5,7 +5,7 @@ class View {
     protected $viewData = array();
             
     function __construct() {
-        Debug::addMsg('View geladen');
+Debug::addMsg('View geladen');
     }
     
     // ruft eine Layout-Datei auf und bindet darin ein TemplateView ein - Standardmäßig wird index eingebunden

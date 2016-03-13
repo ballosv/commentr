@@ -4,7 +4,7 @@ class Index extends Controller {
 
     function __construct() {
         parent::__construct();
-        Debug::addMsg('index Controller');
+Debug::addMsg('index Controller');
         
     }
     

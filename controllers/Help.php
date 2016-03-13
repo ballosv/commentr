@@ -4,7 +4,7 @@ class Help extends Controller {
             
     function __construct() {
         parent::__construct();
-        Debug::addMsg('Help Controller');
+Debug::addMsg('Help Controller');
     }
     
     public function index(){
