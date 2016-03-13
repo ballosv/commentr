@@ -46,5 +46,50 @@ class User_Model extends Model {
         return $save;
         
     }
+    
+    public function createNewComment($opinionId){
+        Debug::addMsg('Neuer Kommentar wird gespeichert');
+        $title = filter_input(INPUT_POST, 'comment-title', FILTER_SANITIZE_STRING);
+        $text = filter_input(INPUT_POST, 'comment-text', FILTER_SANITIZE_STRING);
+        $userId = Session::get('user_id');
+        
+        try {
+            // Startet die Warteschleife
+            $this->db->beginTransaction();
+            /*
+             * START Queries
+             */
+            
+            // Meinung speichern
+            $query = $this->db->prepare("INSERT INTO comments (opinion_id, user_id, title, text) VALUES (:opinion_id, :user_id, :title, :text)");
+            $save = $query->execute(array(
+                ':opinion_id' => $opinionId,
+                ':user_id' => $userId,
+                ':title' => $title,
+                ':text' => $text
+            ));
+            
+            // Die zuletzt gespeicherte ID
+            $lastId = $this->db->lastInsertId();
+            
+            // Anzahl Kommentare erhöhen
+            $query = $this->db->prepare("UPDATE opinions SET comments = comments+1 WHERE id = :last_id");
+            $save = $query->execute(array(
+                ':last_id' => $lastId
+            ));
+            
+            /*
+             * END Queries
+             */
+            
+            // Durchführen der Warteschleife
+            $this->db->commit();
+        } catch (PDOException $ex) {
+            // Wenn es Fehler gab, Vorgänge rückgängig machen
+            $this->db->rollback();
+        }
+        
+        return $save;
+    }
 
 }

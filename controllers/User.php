@@ -4,7 +4,7 @@ class User extends Controller {
 
     function __construct() {
         parent::__construct();
-        Debug::addMsg('User-Controller geladen');
+Debug::addMsg('User-Controller geladen');
         if(Url::getRedirectPage()){
             Url::setRedirectPage(Url::printUrl(true));
         }
@@ -35,6 +35,23 @@ class User extends Controller {
             header('Location: ' . Url::getTempUrl('theme_page'));
         }else{
             header('Location: ' . BASE_URL . '/error/error-save-opinion');
+        }
+    }
+    
+    public function newComment($param){
+        $this->view->setViewData('subtheme_link', $param[0]);
+        $this->view->setViewData('opinion_id', $param[1]);
+        $this->setViewFile('new_comment');
+    }
+    
+    public function createNewComment($param){
+        Debug::addMsg('Neuer Kommentar wird erstellt.');
+        $saveComment = $this->model->createNewComment($param[1]);
+        
+        if($saveComment === true){
+            header('Location: ' . Url::getTempUrl('theme_page'));
+        }else{
+            header('Location: ' . BASE_URL . '/error/error-save-comment');
         }
     }
 

@@ -25,6 +25,7 @@
                             <?php elseif (Session::get('user_role') == 0): ?>
                             <li><a href="<?php echo BASE_URL; ?>/user">Dashboard</a></li>
                             <?php endif; ?>
+                            <li><a href="<?php echo BASE_URL; ?>/user/show-profile"><?= Session::get('name'); ?></a></li>
                         <li><a href="<?php echo BASE_URL; ?>/login/logout-user">Logout</a></li>
                         <?php else: ?>
                         <li><a href="<?php echo BASE_URL; ?>/login">Login</a></li>

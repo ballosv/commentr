@@ -47,6 +47,7 @@ class Admin extends Controller {
     }
     
     public function showTrash(){
+        Debug::addMsg('Deaktivierte Themen sollen angezeigt werden');
         $this->view->setViewData('trash-themes', $this->model->getAllDeactivatedThemes());
         $this->setViewFile('trash');
     }

@@ -4,7 +4,7 @@ class Login extends Controller{
             
     function __construct() {
         parent::__construct();
-        Debug::addMsg('Login-Controller geladen');
+Debug::addMsg('Login-Controller geladen');
     }
     
     public function index(){

@@ -3,7 +3,7 @@
 class Session {
 
     public static function init(){
-        Debug::addMsg('Session wurde gestartet');
+Debug::addMsg('Session wurde gestartet');
         session_start();
     }
     

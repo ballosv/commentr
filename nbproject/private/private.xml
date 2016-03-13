@@ -13,18 +13,11 @@
         </group>
         <group name="work_commentr">
             <file>file:/Users/ballosv/_git_projects/commentr/controllers/User.php</file>
-            <file>file:/Users/ballosv/_git_projects/commentr/libs/Bootstrap.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/views/user/new_comment.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/models/User_Model.php</file>
             <file>file:/Users/ballosv/_git_projects/commentr/controllers/Theme.php</file>
             <file>file:/Users/ballosv/_git_projects/commentr/libs/Model.php</file>
-            <file>file:/Users/ballosv/_git_projects/commentr/libs/Url.php</file>
             <file>file:/Users/ballosv/_git_projects/commentr/views/theme/show_theme.php</file>
-            <file>file:/Users/ballosv/_git_projects/commentr/controllers/Login.php</file>
-            <file>file:/Users/ballosv/_git_projects/commentr/models/User_Model.php</file>
-            <file>file:/Users/ballosv/_git_projects/commentr/views/user/new_opinion.php</file>
-            <file>file:/Users/ballosv/_git_projects/commentr/controllers/Admin.php</file>
-            <file>file:/Users/ballosv/_git_projects/commentr/config.php</file>
-            <file>file:/Users/ballosv/_git_projects/commentr/models/Admin_Model.php</file>
-            <file>file:/Users/ballosv/_git_projects/commentr/views/index/index.php</file>
         </group>
     </open-files>
 </project-private>
