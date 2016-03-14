@@ -35,6 +35,7 @@ Debug::addMsg('Theme-Controller wurde geladen');
         $opinions = array();
         $AllOpinionsWithComments = array();
         $commments = array();
+        $likes = array();
         foreach ($subthemes as $subtheme){
             $opinions[$subtheme['id']] = $this->model->getOpinionsBySubtheme($subtheme['id']);
             $opinionsWidthComments = $this->model->getCommentedOpinionsBySubtheme($subtheme['id'], '');
@@ -44,11 +45,13 @@ Debug::addMsg('Theme-Controller wurde geladen');
             // Kommentare auslesen
             foreach ($AllOpinionsWithComments[$subtheme['id']] as $opinion){
                 $commments[$opinion['id']] = $this->model->getCommentsBySubtheme($opinion['id']);
+                $likes[$opinion['id']] = $this->model->getLikesByOpinion($opinion['id']);
             }
         }
         
         $this->view->setViewData('opinions', $opinions);
         $this->view->setViewData('comments', $commments);
+        $this->view->setViewData('likes', $likes);
         
         $this->setViewFile('show_theme');
     }
