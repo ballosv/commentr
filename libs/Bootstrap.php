@@ -5,7 +5,7 @@ class Bootstrap {
     protected $controller;
     protected $method;
     protected $params;
-            
+           
     function __construct() {
         // Eine Session starten, damit sie überall verfügbar ist
         Session::init();
@@ -14,7 +14,6 @@ class Bootstrap {
         $this->method = Url::getMethod('lcc');
         $this->params = Url::getParams();
         
-//        var_dump(Url::getParams());
         Debug::addMsg('REDIRECT_URL: ' . $_SERVER['REDIRECT_URL']);
         Debug::addMsg('QUERY_STRING: ' . $_SERVER['QUERY_STRING']);
         Debug::addMsg('REQUEST_URI: ' . $_SERVER['REQUEST_URI']);
@@ -23,18 +22,18 @@ class Bootstrap {
         if(empty($this->controller)){
             $this->controller = 'index';
         }
-
+        
         Debug::addMsg('Controller: ' . Url::getController());
         Debug::addMsg('Methode: ' . Url::getMethod());
         Debug::addMsg('Parameter-1: ' . Url::getParams()[0]);
         Debug::addMsg('Parameter-2: ' . Url::getParams()[1]);
-
+        
         // Prüfen ob es den Controller gibt
         if (!file_exists(CONTROLLER_PATH . DIRECTORY_SEPARATOR . ucfirst($this->controller) . '.php')) {
             $this->controller = 'error';
             $this->method = 'error404';
         }
-//        
+        
         $controllerName = ucfirst($this->controller);
         require_once CONTROLLER_PATH . DIRECTORY_SEPARATOR . $controllerName . '.php';
         $controller = new $controllerName;
