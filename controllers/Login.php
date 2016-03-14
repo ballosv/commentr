@@ -1,10 +1,13 @@
 <?php
 
 class Login extends Controller{
+         
+    protected $redirect;
             
     function __construct() {
         parent::__construct();
-Debug::addMsg('Login-Controller geladen');
+        Debug::addMsg('Login-Controller geladen');
+        $this->redirect = Url::getLastPage();
     }
     
     public function index(){
@@ -28,10 +31,8 @@ Debug::addMsg('Login-Controller geladen');
                 }
                 
                 if(Session::get('user_role') == 0){
-                    if(!empty(Url::getRedirectPage())){
-                        $redirect = html_entity_decode(Url::getRedirectPage());
-                        Url::unsetRedirectPage();
-                        header('Location: ' . $redirect);
+                    if(!empty($this->redirect)){
+                        header('Location: ' . $this->redirect);
                         exit;
                     }
                     header('Location: ' . BASE_URL . '/user');

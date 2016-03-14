@@ -19,6 +19,7 @@ class Controller {
             
     function __construct() {
         Debug::addMsg('Base-Controller gestartet');
+//        Url::setRedirectPage(Url::printUrl(true));
         
         // Instanz der View-Klasse erstellen
         $this->view = new View();
