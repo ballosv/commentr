@@ -4,13 +4,13 @@ class Login_Model extends Model{
 
     function __construct() {
         parent::__construct();
-Debug::addMsg('Login_Model wurde geladen');
+        Debug::addMsg('Login_Model wurde geladen');
         
     }
     
     public function checkLogin($username, $password){
         // User aus der Datenbank auslesen
-        $query = $this->db->prepare("SELECT id, name, pass, role FROM users WHERE name = :username");
+        $query = $this->db->prepare("SELECT id, name, pass, hash, role FROM users WHERE name = :username");
         $query->execute(array(
             ':username' => $username
         ));
@@ -21,7 +21,7 @@ Debug::addMsg('Login_Model wurde geladen');
         
         if($rowCount > 0){
             // Passwort prüfen
-            if(password_verify($password, $data['pass']) === TRUE){
+            if( hash('SHA512',$password . $data['hash']) === $data['pass'] ){
                 Session::init();
                 Session::set('login_status', true);
                 Session::set('name', $data['name']);
@@ -36,7 +36,6 @@ Debug::addMsg('Login_Model wurde geladen');
                 if($data['role'] == 0){
                     Session::set('user_role', 0);
                 }
-                
                 return true;
             }
             else{
