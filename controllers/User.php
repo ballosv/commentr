@@ -56,46 +56,28 @@ class User extends Controller {
     
     public function like($params){
         $opinionId = $params[1];
+        $save = $this->model->setLikeStatus($opinionId, 1);
         
-        $statusLike = $this->model->checkVote($opinionId);
-        
-        if($statusLike === false){
-            $vote = $this->model->setLikeStatus($opinionId, 1);
+        if($save === true){
+            header('Location: ' . Url::getTempUrl('theme_page'));
+        }elseif($save === 'already-voted'){
+            header('Location: ' . BASE_URL . '/error/error-already-voted');
         }
         else{
-            if($statusLike == 0){
-                $vote = $this->model->updateLikeStatus($opinionId, '1');
-            }else{
-                $vote = true;
-            }
-        }
-
-        if($vote == true){
-            header('Location: ' . Url::getTempUrl('theme_page'));
-        }else{
             header('Location: ' . BASE_URL . '/error/error-save-like');
         }
     }
     
     public function dislike($params){
         $opinionId = $params[1];
+        $save = $this->model->setLikeStatus($opinionId, 0);
         
-        $statusLike = $this->model->checkVote($opinionId);
-        
-        if($statusLike === false){
-            $vote = $this->model->setLikeStatus($opinionId, '0');
+        if($save === true){
+            header('Location: ' . Url::getTempUrl('theme_page'));
+        }elseif($save === 'already-voted'){
+            header('Location: ' . BASE_URL . '/error/error-already-voted');
         }
         else{
-            if($statusLike == 1){
-                $vote = $this->model->updateLikeStatus($opinionId, '0');
-            }else{
-                $vote = true;
-            }
-        }
-        
-        if($vote == true){
-            header('Location: ' . Url::getTempUrl('theme_page'));
-        }else{
             header('Location: ' . BASE_URL . '/error/error-save-like');
         }
     }
