@@ -12,12 +12,19 @@
             <file>file:/Users/ballosv/_git_projects/commentr/libs/Model.php</file>
         </group>
         <group name="work_commentr">
+            <file>file:/Users/ballosv/_git_projects/commentr/controllers/Index.php</file>
             <file>file:/Users/ballosv/_git_projects/commentr/controllers/User.php</file>
-            <file>file:/Users/ballosv/_git_projects/commentr/models/User_Model.php</file>
-            <file>file:/Users/ballosv/_git_projects/commentr/config.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/index.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/libs/Bootstrap.php</file>
             <file>file:/Users/ballosv/_git_projects/commentr/controllers/Theme.php</file>
             <file>file:/Users/ballosv/_git_projects/commentr/libs/Model.php</file>
-            <file>file:/Users/ballosv/_git_projects/commentr/views/theme/show_theme.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/libs/Url.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/models/Login_Model.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/controllers/Login.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/models/User_Model.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/models/Index_Model.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/config.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/libs/Controller.php</file>
         </group>
     </open-files>
 </project-private>

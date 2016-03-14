@@ -131,4 +131,38 @@ class User_Model extends Model {
         return $save;
     }
     
+    public function checkVote($opinionId){
+        Debug::addMsg('Prüfen ob der User bereits gevotet hat.');
+        
+        $userId = Session::get('user_id');
+        
+        $query = $this->db->prepare("SELECT * FROM opinion_has_likes WHERE opinion_id = :opinion_id AND user_id = :user_id");
+        $query->execute(array(
+            ':opinion_id' => $opinionId,
+            ':user_id' => $userId
+        ));
+        
+        $select = $query->fetch(FETCH_MODE);
+        $rowCount = $query->rowCount();
+        
+        if($rowCount > 0){
+            return $select['like_status'];
+        }
+        
+        return false;
+    }
+    
+    public function updateLikeStatus($opinionId, $likeStatus){
+        $userId = Session::get('user_id');
+        
+        $query = $this->db->prepare("UPDATE opinion_has_likes SET like_status = :like_status WHERE opinion_id = :opinion_id AND user_id = :user_id");
+        $update = $query->execute(array(
+            ':opinion_id' => $opinionId,
+            ':user_id' => $userId,
+            ':like_status' => $likeStatus
+        ));
+        
+        return $update;
+    }
+    
 }
