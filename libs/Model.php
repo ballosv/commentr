@@ -132,9 +132,10 @@ class Model {
         }
     }
     
-    public function getCommentsBySubtheme($opinionId){
+    public function getCommentsBySubtheme($opinionId, $limit = FALSE){
         Debug::addMsg('Alle Kommentare eines Subthemes holen');
-        $query = $this->db->prepare("SELECT "
+        if($limit === FALSE){
+            $query = "SELECT "
                 . "comments.id, "
                 . "comments.opinion_id, "
                 . "comments.user_id,"
@@ -143,12 +144,28 @@ class Model {
                 . "comments.text,"
                 . "comments.date "
                 . "FROM comments JOIN users ON comments.user_id = users.id "
-                . "WHERE opinion_id = :opinion_id"
-                );
+                . "WHERE opinion_id = :opinion_id";
+        }
+        
+        if($limit > 0){
+            $query = "SELECT "
+                . "comments.id, "
+                . "comments.opinion_id, "
+                . "comments.user_id,"
+                . "users.name as username,"
+                . "comments.title,"
+                . "comments.text,"
+                . "comments.date "
+                . "FROM comments JOIN users ON comments.user_id = users.id "
+                . "WHERE opinion_id = :opinion_id "
+                . "LIMIT " . $limit;
+        }
+        
+        $query = $this->db->prepare($query);
+        
         $query->execute(array(
             'opinion_id' => $opinionId
         ));
-        
         $data = $query->fetchAll(FETCH_MODE);
         
         $rowCount = $query->rowCount();
@@ -170,6 +187,24 @@ class Model {
         if($rowCount > 0){
             return $data[0];
         }
+    }
+    
+    public function getLikesByOpinion($opinionId){
+        Debug::addMsg('Anzahl Likes einer Meinung werden ausgelesen');
+        $query = $this->db->prepare("SELECT count(*) AS likes_count FROM opinion_has_likes WHERE opinion_id = :opinion_id GROUP BY like_status");
+        $query->execute(array(
+            'opinion_id' => $opinionId
+        ));
+        
+        $data = $query->fetchAll(FETCH_MODE);
+        $rowCount = $query->rowCount();
+        
+        if($rowCount > 0){
+            return $data[0];
+        }
+        
+        return FALSE;
+        
     }
     
     public function clearString($str, $how = '-'){

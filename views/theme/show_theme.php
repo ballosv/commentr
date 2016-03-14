@@ -3,6 +3,7 @@ $theme = $this->getViewData('theme');
 $subthemes = $this->getViewData('subthemes');
 $opinions = $this->getViewData('opinions');
 $comments = $this->getViewData('comments');
+$likes = $this->getViewData('likes');
 ?>
 <h1><?= $theme['name']; ?></h1>
 <p><?= $theme['teaser']; ?></p>
@@ -20,8 +21,8 @@ $comments = $this->getViewData('comments');
                 <h3><?= $data['title']; ?></h3>
                 <p><?= $data['text']; ?></p>
                 <div class="rating">
-                    <p class="like"><span class="count">0 </span><a href="#">Zustimmen</a></p>
-                    <p class="dislike"><span class="count">0 </span><a href="#">Ablehnen</a></p>
+                    <p class="like"><span class="count"><?= $likes[$data['id']]['likes_count'] !== NULL ? $likes[$data['id']]['likes_count'] : 0; ?> </span><a href="<?= BASE_URL . '/user/like/' . $subtheme['link'] . DIRECTORY_SEPARATOR . $data['id']; ?>">Zustimmen</a></p>
+                    <p class="dislike"><span class="count">0 </span><a href="<?= BASE_URL . '/user/dislike/' . $subtheme['link'] . DIRECTORY_SEPARATOR . $data['id']; ?>">Ablehnen</a></p>
                 </div>
                 <p>Anzahl Kommentare: <?= $data['comments']; ?></p>
                 <a href="<?= BASE_URL . '/user/new-comment/' . $subtheme['link'] . DIRECTORY_SEPARATOR . $data['id']; ?>">Kommentieren</a>

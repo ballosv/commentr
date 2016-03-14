@@ -54,6 +54,9 @@ class Bootstrap {
             }
         }
         
+        $controller->index();
+        Url::setLastPage();
+        
         // Parameter auslesen
 //        $url = $this->parseUrl();
         
@@ -126,8 +129,7 @@ class Bootstrap {
 //        }
 //        echo Url::parseUrl();
         // Nachdem die Controller-Methode ausgeführt wurde, die index-Methode für die Anzeige ausführen
-        $controller->index();
-        Url::setLastPage();
+//        $controller->index();
     }
 
 //    protected function parseUrl(){

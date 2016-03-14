@@ -54,5 +54,23 @@ Debug::addMsg('User-Controller geladen');
             header('Location: ' . BASE_URL . '/error/error-save-comment');
         }
     }
+    
+    public function like($params){
+        $opinionId = $params[1];
+        $save = $this->model->setLikeStatus($opinionId, 1);
+        
+        if($save === true){
+            header('Location: ' . Url::getTempUrl('theme_page'));
+        }elseif($save === 'already-voted'){
+            header('Location: ' . BASE_URL . '/error/error-already-voted');
+        }
+        else{
+            header('Location: ' . BASE_URL . '/error/error-save-like');
+        }
+    }
+    
+    public function dislike(){
+        
+    }
 
 }

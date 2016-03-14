@@ -92,4 +92,43 @@ class User_Model extends Model {
         return $save;
     }
 
+    public function setLikeStatus($opinionId, $likeStatus){
+        Debug::addMsg('Like wird gespeichert');
+        $userId = Session::get('user_id');
+        
+        try {
+            // Startet die Warteschleife
+            $this->db->beginTransaction();
+            /*
+             * START Queries
+             */
+            
+            $query = $this->db->prepare("SELECT * FROM opinion_has_likes WHERE opinion_id = :opinion_id AND user_id = :user_id");
+            $select = $query->execute(array(
+                ':opinion_id' => $opinionId,
+                ':user_id' => $userId
+            ));
+            
+            $rowCount = $query->rowCount();
+            if($rowCount > 0){
+                return 'already-voted';
+            }
+            
+            $query = $this->db->prepare("INSERT INTO opinion_has_likes (opinion_id, user_id, like_status) VALUES (:opinion_id, :user_id, :like_status)");
+            $save = $query->execute(array(
+                ':opinion_id' => $opinionId,
+                ':user_id' => $userId,
+                ':like_status' => $likeStatus
+            ));
+            
+            // Durchführen der Warteschleife
+            $this->db->commit();
+        } catch (PDOException $ex) {
+            // Wenn es Fehler gab, Vorgänge rückgängig machen
+            $this->db->rollback();
+        }
+        
+        return $save;
+    }
+    
 }
