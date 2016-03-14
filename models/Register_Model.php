@@ -33,9 +33,14 @@ class Register_Model extends Model{
         
         $query = $this->db->prepare('SELECT id FROM users WHERE name = :name');
         
-        $result = $query->execute( array( $name ) );
-        
-        $affectedRow;
+        $result = $query->execute( array( ':name' => $name ) );
+        $row = $query->fetch(PDO::FETCH_ASSOC);
+
+        if( $row ) {
+            return true;
+        } else {
+            return false;
+        }
         
     }
 

@@ -37,8 +37,7 @@ class Login_Model extends Model{
                     Session::set('user_role', 0);
                 }
                 return true;
-            }
-            else{
+            } else{
                 return false;
             }
         }else{
