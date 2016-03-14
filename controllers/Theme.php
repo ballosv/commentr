@@ -31,13 +31,22 @@ Debug::addMsg('Theme-Controller wurde geladen');
 //        $redirectUrl = '/user/new-opinion/' . $theme['link'] . '/' . $link;
 //        Url::setRedirectPage($redirectUrl);
         
-        // Alle Meinungen und Kommentare der Subthemes auslesen und speichern
+        // Alle Meinungen, Kommentare und Likes bzw. Dislikes der Subthemes auslesen und speichern
         $opinions = array();
         $AllOpinionsWithComments = array();
         $commments = array();
         $likes = array();
+        
         foreach ($subthemes as $subtheme){
             $opinions[$subtheme['id']] = $this->model->getOpinionsBySubtheme($subtheme['id']);
+            foreach($opinions[$subtheme['id']] as $opinion){
+                $like = $this->model->getLikesByOpinion($opinion['id'], 'count');
+                // Like nur speichern, wenn auch ein Datensatz vorhanden ist
+                if($like !== FALSE){
+                    $likes[$opinion['id']] = $like;
+                }
+            }
+            
             $opinionsWidthComments = $this->model->getCommentedOpinionsBySubtheme($subtheme['id'], '');
             if($opinionsWidthComments !== NULL){
                 $AllOpinionsWithComments[$subtheme['id']] = $opinionsWidthComments;
@@ -45,7 +54,6 @@ Debug::addMsg('Theme-Controller wurde geladen');
             // Kommentare auslesen
             foreach ($AllOpinionsWithComments[$subtheme['id']] as $opinion){
                 $commments[$opinion['id']] = $this->model->getCommentsBySubtheme($opinion['id']);
-                $likes[$opinion['id']] = $this->model->getLikesByOpinion($opinion['id']);
             }
         }
         

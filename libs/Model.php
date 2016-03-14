@@ -189,21 +189,85 @@ class Model {
         }
     }
     
-    public function getLikesByOpinion($opinionId){
+    public function getLikesByOpinion($opinionId, $format = 'count'){
         Debug::addMsg('Anzahl Likes einer Meinung werden ausgelesen');
-        $query = $this->db->prepare("SELECT count(*) AS likes_count FROM opinion_has_likes WHERE opinion_id = :opinion_id GROUP BY like_status");
-        $query->execute(array(
-            'opinion_id' => $opinionId
-        ));
+        try {
+            // Startet die Warteschleife
+            $this->db->beginTransaction();
+            /*
+             * START Queries
+             */
+            
+            // Likes holen
+            if($format === 'count'){
+                $query = $this->db->prepare("SELECT COUNT(*) AS likes FROM opinion_has_likes WHERE opinion_id = :opinion_id AND like_status = '1'");
+            }
+
+            if($format === 'data'){
+                $query = $this->db->prepare("SELECT * FROM opinion_has_likes WHERE opinion_id = :opinion_id AND like_status = '1'");
+            }
+            
+            $query->execute(array(
+                'opinion_id' => $opinionId
+            ));
+            
+            $likes = $query->fetchAll(FETCH_MODE);
+            $likesCount = $query->rowCount();
+            
+            // dislikes holen
+            if($format === 'count'){
+                $query = $this->db->prepare("SELECT COUNT(*) AS dislikes FROM opinion_has_likes WHERE opinion_id = :opinion_id AND like_status = '0'");
+            }
+
+            if($format === 'data'){
+                $query = $this->db->prepare("SELECT * FROM opinion_has_likes WHERE opinion_id = :opinion_id AND like_status = '0'");
+            }
+            
+            $query->execute(array(
+                'opinion_id' => $opinionId
+            ));
+            
+            $dislikes = $query->fetchAll(FETCH_MODE);
+            $dislikesCount = $query->rowCount();
+            
+            // Durchführen der Warteschleife
+            $this->db->commit();
+        } catch (PDOException $ex) {
+            // Wenn es Fehler gab, Vorgänge rückgängig machen
+            $this->db->rollback();
+        }
         
-        $data = $query->fetchAll(FETCH_MODE);
-        $rowCount = $query->rowCount();
+        $opinionLikes['likes'] = $likes[0]['likes'];
+        $opinionLikes['dislikes'] = $dislikes[0]['dislikes'];
         
-        if($rowCount > 0){
-            return $data[0];
+        if($opinionLikes != NULL){
+            return $opinionLikes;
         }
         
         return FALSE;
+        
+//        $query = $this->db->prepare("SELECT count(*) AS likes_count FROM opinion_has_likes WHERE opinion_id = :opinion_id GROUP BY like_status");
+//        $query->execute(array(
+//            'opinion_id' => $opinionId
+//        ));
+        
+        
+        
+//        if($rowCount > 0){
+//            if($format === 'data'){
+//                return $data[0];
+//            }
+//            
+//            if($format === 'count'){
+//                return $rowCount;
+//            }
+//            
+//        }
+//        if($rowCount > 0){
+//            return $data[0];
+//        }
+//        
+//        return FALSE;
         
     }
     

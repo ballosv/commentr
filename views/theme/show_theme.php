@@ -21,8 +21,8 @@ $likes = $this->getViewData('likes');
                 <h3><?= $data['title']; ?></h3>
                 <p><?= $data['text']; ?></p>
                 <div class="rating">
-                    <p class="like"><span class="count"><?= $likes[$data['id']]['likes_count'] !== NULL ? $likes[$data['id']]['likes_count'] : 0; ?> </span><a href="<?= BASE_URL . '/user/like/' . $subtheme['link'] . DIRECTORY_SEPARATOR . $data['id']; ?>">Zustimmen</a></p>
-                    <p class="dislike"><span class="count">0 </span><a href="<?= BASE_URL . '/user/dislike/' . $subtheme['link'] . DIRECTORY_SEPARATOR . $data['id']; ?>">Ablehnen</a></p>
+                    <p class="like"><span class="count"><?= $likes[$data['id']]['likes'] !== NULL ? $likes[$data['id']]['likes'] : 0; ?> </span><a href="<?= BASE_URL . '/user/like/' . $subtheme['link'] . DIRECTORY_SEPARATOR . $data['id']; ?>">Zustimmen</a></p>
+                    <p class="dislike"><span class="count"><?= $likes[$data['id']]['dislikes'] !== NULL ? $likes[$data['id']]['dislikes'] : 0; ?> </span><a href="<?= BASE_URL . '/user/dislike/' . $subtheme['link'] . DIRECTORY_SEPARATOR . $data['id']; ?>">Ablehnen</a></p>
                 </div>
                 <p>Anzahl Kommentare: <?= $data['comments']; ?></p>
                 <a href="<?= BASE_URL . '/user/new-comment/' . $subtheme['link'] . DIRECTORY_SEPARATOR . $data['id']; ?>">Kommentieren</a>
