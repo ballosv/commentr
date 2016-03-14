@@ -13,7 +13,7 @@ class Bootstrap {
         $this->controller = Url::getController();
         $this->method = Url::getMethod('lcc');
         $this->params = Url::getParams();
-        
+        // h
 //        var_dump(Url::getParams());
         
         Debug::addMsg('REDIRECT_URL: ' . $_SERVER['REDIRECT_URL']);
