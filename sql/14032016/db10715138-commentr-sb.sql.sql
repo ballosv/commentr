@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost:8889
--- Erstellungszeit: 14. Mrz 2016 um 10:49
+-- Erstellungszeit: 14. Mrz 2016 um 13:52
 -- Server-Version: 5.5.42
 -- PHP-Version: 5.6.10
 
@@ -111,7 +111,7 @@ CREATE TABLE `opinion_has_likes` (
   `user_id` int(10) NOT NULL,
   `like_status` enum('0','1') COLLATE utf8_unicode_ci DEFAULT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Daten für Tabelle `opinion_has_likes`
@@ -119,7 +119,13 @@ CREATE TABLE `opinion_has_likes` (
 
 INSERT INTO `opinion_has_likes` (`id`, `opinion_id`, `user_id`, `like_status`, `date`) VALUES
 (7, 2, 2, '1', '2016-03-13 18:50:54'),
-(8, 3, 2, '1', '2016-03-13 22:12:11');
+(8, 3, 2, '1', '2016-03-13 22:12:11'),
+(9, 6, 2, '1', '2016-03-14 09:52:09'),
+(10, 7, 2, '1', '2016-03-14 10:21:06'),
+(11, 10, 2, '0', '2016-03-14 10:26:33'),
+(12, 2, 3, '0', '2016-03-14 10:28:25'),
+(13, 3, 3, '1', '2016-03-14 10:29:04'),
+(14, 6, 3, '1', '2016-03-14 11:26:13');
 
 -- --------------------------------------------------------
 
@@ -212,7 +218,7 @@ CREATE TABLE `users` (
   `hash` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `role` int(1) NOT NULL,
   `newsletter` int(1) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Daten für Tabelle `users`
@@ -220,7 +226,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `pass`, `hash`, `role`, `newsletter`) VALUES
 (1, 'admin', 'admin@commentr.de', '$2y$10$7LL9eGC2YDAZ/5zI9LeoDuYGByNAxApNB6HTqcuiQIRxc0F9.0Jd2', '', 1, 1),
-(2, 'sven', 'test@test.de', '$2y$10$7LL9eGC2YDAZ/5zI9LeoDuYGByNAxApNB6HTqcuiQIRxc0F9.0Jd2', '', 0, 0);
+(2, 'sven', 'test@test.de', '$2y$10$7LL9eGC2YDAZ/5zI9LeoDuYGByNAxApNB6HTqcuiQIRxc0F9.0Jd2', '', 0, 0),
+(3, 'freddy', 'test2@test.de', '$2y$10$7LL9eGC2YDAZ/5zI9LeoDuYGByNAxApNB6HTqcuiQIRxc0F9.0Jd2', '', 0, 0);
 
 --
 -- Indizes der exportierten Tabellen
@@ -297,7 +304,7 @@ ALTER TABLE `opinions`
 -- AUTO_INCREMENT für Tabelle `opinion_has_likes`
 --
 ALTER TABLE `opinion_has_likes`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=9;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT für Tabelle `sub_theme`
 --
@@ -317,7 +324,7 @@ ALTER TABLE `themes_has_categories`
 -- AUTO_INCREMENT für Tabelle `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
