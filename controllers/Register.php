@@ -21,8 +21,8 @@ class Register extends Controller{
             $error[] = 'Fehlerhafter Name';
         } else {
             $nameExist = $this->model->userExist($name);
-            
-            if( $nameExist ) {
+
+            if( $nameExist === true ) {
                 $error[] = 'Dieser Name ist bereits vergeben';
             }
             
