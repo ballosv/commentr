@@ -13,7 +13,7 @@
 </form>
 <?php if($msgs = $this->getViewData('msg')): ?>
     <?php foreach($msgs as $msg): ?>
-        <?= $msg . '<br/>' ?>
+    <p class="<?= $this->getViewData('class') ?>"><?= $msg ?></p>
     <?php endforeach; ?>
 <?php endif; ?>
 <p>Sie haben bereits ein Konto? <a href="#">Hier</a> einloggen</p>

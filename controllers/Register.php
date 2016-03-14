@@ -41,7 +41,9 @@ class Register extends Controller{
         }
         
         if( $msg ) {
-            $this->view->setViewData('msg',$msg);
+            // Später eine reine Success Seite redirecten
+            $success[] = 'Sie wurden erfolgreich registriert!';
+            $this->view->setViewData('msg',$success);
             $this->view->setViewData('class','success');
         } else {
             $this->view->setViewData('msg',$error);
