@@ -4,13 +4,12 @@ class User extends Controller {
 
     function __construct() {
         parent::__construct();
-Debug::addMsg('User-Controller geladen');
+        Debug::addMsg('User-Controller geladen');
         if(Url::getRedirectPage()){
             Url::setRedirectPage(Url::printUrl(true));
         }
         
         if($this->loginStatus == false || $this->userRole !== 0){
-//            Session::destroy();
             header('Location: ' . BASE_URL . '/login');
             exit;
         }
