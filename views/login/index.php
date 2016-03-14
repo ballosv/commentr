@@ -8,5 +8,5 @@
     <br />
     <input type="submit" value="einloggen" />
 </form>
-<p>Noch kein Konto? <a href="<?= BASE_URL . '/register' ?>">Hier</a> Konto erstellen</p>
+<p>Noch kein Konto? <a href="#">Hier</a> Konto erstellen</p>
    

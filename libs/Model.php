@@ -9,10 +9,6 @@ class Model {
         $this->db = new Database();
     }
     
-    public function getThemes($count){
-        
-    }
-    
     public function getAllThemes(){
         Debug::addMsg('Alle Themen werden geladen');
         $query = $this->db->prepare("SELECT * FROM themes WHERE parent = 0 AND status = 1");
@@ -249,6 +245,29 @@ class Model {
         }
         
         return FALSE;
+        
+//        $query = $this->db->prepare("SELECT count(*) AS likes_count FROM opinion_has_likes WHERE opinion_id = :opinion_id GROUP BY like_status");
+//        $query->execute(array(
+//            'opinion_id' => $opinionId
+//        ));
+        
+        
+        
+//        if($rowCount > 0){
+//            if($format === 'data'){
+//                return $data[0];
+//            }
+//            
+//            if($format === 'count'){
+//                return $rowCount;
+//            }
+//            
+//        }
+//        if($rowCount > 0){
+//            return $data[0];
+//        }
+//        
+//        return FALSE;
         
     }
     
