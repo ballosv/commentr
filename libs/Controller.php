@@ -18,7 +18,7 @@ class Controller {
     protected $loginStatus;
             
     function __construct() {
-Debug::addMsg('Base-Controller gestartet');
+        Debug::addMsg('Base-Controller gestartet');
         
         // Instanz der View-Klasse erstellen
         $this->view = new View();
