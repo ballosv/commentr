@@ -24,9 +24,6 @@ Debug::addMsg('Theme-Controller wurde geladen');
         $subthemes = $this->model->getAllSubthemesByTheme($theme['id']);
         $this->view->setViewData('subthemes', $subthemes);
 
-        $redirectUrl = '/user/new-opinion/';
-        Url::setRedirectPage($redirectUrl);
-        
         // Funktioniert hier nicht, weil noch nicht bekannt ist, zu welchem Subtheme eine Meinung gespeichert werden soll
 //        $redirectUrl = '/user/new-opinion/' . $theme['link'] . '/' . $link;
 //        Url::setRedirectPage($redirectUrl);

@@ -10,12 +10,14 @@ class Register_Model extends Model{
     
     public function createUser($name, $mail, $pass) {
         
+        // 
         $hash = hash('SHA512', uniqid());
         
+        //
         $hashedPassword = hash('SHA512', $pass . $hash);
-        
+
         $query = $this->db->prepare('INSERT INTO '
-                . 'users(name,email,pass,hash,role,newsletter) '
+                . 'users(name, email, pass, hash, role, newsletter) '
                 . 'VALUES(:name, :email, :pass, :hash, :role, :newsletter)');
         
         $result = $query->execute(array(
@@ -26,6 +28,13 @@ class Register_Model extends Model{
             ':role' => 0,
             ':newsletter' => 1
         ));
+        
+        if($result) {
+            return true;
+        } else {
+            return false;
+        }
+        
         
     }
     

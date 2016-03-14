@@ -54,7 +54,9 @@ class Bootstrap {
         }
         
         $controller->index();
-        Url::setLastPage();
+        if(Url::getController() !== 'login'){
+            Url::setLastPage();
+        }
         
         // Parameter auslesen
 //        $url = $this->parseUrl();

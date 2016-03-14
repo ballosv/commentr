@@ -4,11 +4,11 @@ class Admin_Model extends Model {
 
     function __construct() {
         parent::__construct();
-Debug::addMsg('Admin_Model wurde geladen');
+        Debug::addMsg('Admin_Model wurde geladen');
     }
     
     public function createNewTheme(){
-Debug::addMsg('Neues Thema wird erstellt');
+        Debug::addMsg('Neues Thema wird erstellt');
         $themeTitle = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $themeTeaser = filter_input(INPUT_POST, 'teaser', FILTER_SANITIZE_STRING);
         $themeParent = filter_input(INPUT_POST, 'parent-theme', FILTER_SANITIZE_STRING);
@@ -57,7 +57,7 @@ Debug::addMsg('Neues Thema wird erstellt');
     }
     
     public function deactivateTheme($themeLink){
-Debug::addMsg('Thema wird deaktiviert');
+        Debug::addMsg('Thema wird deaktiviert');
         // Neues Thema in Datenbank schreiben und Kategorie abspeichern
         try {
             // Startet die Warteschleife
