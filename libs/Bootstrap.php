@@ -21,6 +21,7 @@ class Bootstrap {
         // Wenn kein Controller übergeben wurde auf Standard-Controller schalten
         if(empty($this->controller)){
             $this->controller = 'index';
+            $this->method = 'loadThemes';
         }
         
         Debug::addMsg('Controller: ' . Url::getController());
