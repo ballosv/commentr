@@ -9,8 +9,26 @@ class Model {
         $this->db = new Database();
     }
     
-    public function getThemes($count){
+    public function getThemes($minCount = NULL, $maxCount = NULL){
+        Debug::addMsg('Themen werden nachgeladen');
+        if($minCount === NULL || $maxCount === NULL){
+            $query = $this->db->prepare("SELECT * FROM themes WHERE parent = 0 AND status = 1");
+            $query->execute();
+        }else{
+            $query = $this->db->prepare("SELECT * FROM themes WHERE parent = 0 AND status = 1 ORDER BY date LIMIT $minCount, $maxCount");
+            $query->execute(array(
+                ':min_count' => $minCount,
+                ':max_count' => $maxCount
+            ));
+        }
         
+        $data = $query->fetchAll(FETCH_MODE);
+        
+        $rowCount = $query->rowCount();
+        
+        if($rowCount > 0){
+            return $data;
+        }
     }
     
     public function getAllThemes(){

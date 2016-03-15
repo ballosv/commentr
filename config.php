@@ -24,3 +24,7 @@ define('DB_USER', 'db10715138-comtr');
 define('DB_PASS', 'T3mpP455w0rt');
 
 define('FETCH_MODE', PDO::FETCH_ASSOC);
+
+// Frontend Config
+define('INITIAL_LOAD_COUNT', 5);
+define('DEFAULT_LOAD_COUNT', 10);
