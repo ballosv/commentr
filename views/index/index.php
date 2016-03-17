@@ -1,4 +1,8 @@
-<?php $themes = $this->getViewData('themes'); ?>
+<?php 
+$themes = $this->getViewData('themes');
+$totalCount = $this->getViewData('total_theme_count');
+$loadCount = (count($themes) + DEFAULT_LOAD_COUNT) > $totalCount ? $totalCount : (count($themes) + DEFAULT_LOAD_COUNT);
+?>
 <h1>Startseite</h1>
 <div id="theme-list">
     <ul>
@@ -10,5 +14,7 @@
         </li>
         <?php endforeach; ?>
     </ul>
-    <a href="<?= BASE_URL . '/index/load-themes/' . 0 . DIRECTORY_SEPARATOR . (count($themes) + DEFAULT_LOAD_COUNT); ?>">Show more</a>
+    <?php if(count($themes) != $loadCount): ?>
+    <a href="<?= BASE_URL . '/index/load-themes/' . 0 . DIRECTORY_SEPARATOR . $loadCount; ?>">Show more</a>
+    <?php endif; ?>
 </div>
