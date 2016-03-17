@@ -1,6 +1,8 @@
 <?php 
 $theme = $this->getViewData('theme'); 
 $subthemes = $this->getViewData('subthemes');
+$totalSubthemeCount = $this->getViewData('total_subtheme_count');
+$loadSubthemeCount = (count($subthemes) + DEFAULT_LOAD_COUNT) > $totalSubthemeCount ? $totalSubthemeCount : (count($subthemes) + DEFAULT_LOAD_COUNT);
 $opinions = $this->getViewData('opinions');
 $comments = $this->getViewData('comments');
 $likes = $this->getViewData('likes');
@@ -44,5 +46,8 @@ $likes = $this->getViewData('likes');
     </li>
     <?php endforeach; ?>
 </ul>
+<?php if(count($subthemes) != $loadSubthemeCount): ?>
+<a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . 0 . DIRECTORY_SEPARATOR . $loadSubthemeCount; ?>">Show more</a>
+<?php endif; ?>
 
 

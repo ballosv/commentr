@@ -23,7 +23,7 @@ class Admin_Model extends Model {
              */
             
             // Thema speichern
-            $query = $this->db->prepare("INSERT INTO themes (link, name, teaser, parent, status) VALUES (:link, :name, :teaser, :parent, :status)");
+            $query = $this->db->prepare("INSERT INTO themes (link, name, teaser, parent, status, date) VALUES (:link, :name, :teaser, :parent, :status)");
             $save = $query->execute(array(
                 ':link' => self::clearString($themeTitle),
                 ':name' => $themeTitle,

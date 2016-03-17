@@ -17,7 +17,7 @@ Debug::addMsg('index Controller');
     public function loadThemes($params = array(0, INITIAL_LOAD_COUNT)){
         $minCount = $params[0];
         $maxCount = $params[1];
-        $this->view->setViewData('themes', $this->model->getThemes($minCount, $maxCount));
+        $this->view->setViewData('themes', $this->model->getThemesByCount($minCount, $maxCount));
     }
     
 
