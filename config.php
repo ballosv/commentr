@@ -28,3 +28,4 @@ define('FETCH_MODE', PDO::FETCH_ASSOC);
 // Frontend Config
 define('INITIAL_LOAD_COUNT', 5);
 define('DEFAULT_LOAD_COUNT', 10);
+define('DEFAULT_PERIOD', 259200);

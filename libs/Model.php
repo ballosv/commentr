@@ -9,7 +9,7 @@ class Model {
         $this->db = new Database();
     }
     
-    public function getThemes($minCount = NULL, $maxCount = NULL){
+    public function getThemesByCount($minCount = NULL, $maxCount = NULL){
         Debug::addMsg('Themen werden nachgeladen');
         if($minCount === NULL || $maxCount === NULL){
             $query = $this->db->prepare("SELECT * FROM themes WHERE parent = 0 AND status = 1");
@@ -43,6 +43,83 @@ class Model {
         if($rowCount > 0){
             return $data;
         }
+    }
+    
+    public function getTotalSubthemeCount($themeId){
+        $query = $this->db->prepare("SELECT COUNT(*) AS total_count FROM themes WHERE parent = :theme_id AND status = 1");
+        $query->execute(array(
+            ':theme_id' => $themeId
+        ));
+        
+        $data = $query->fetch(FETCH_MODE);
+        
+        if($data){
+            return $data;
+        }
+        
+        return false;
+    }
+
+
+    public function getSubthemesFromThemeByCount($themeId, $minCount = NULL, $maxCount = NULL){
+        Debug::addMsg('Themen werden nachgeladen');
+        if($minCount === NULL || $maxCount === NULL){
+            $query = $this->db->prepare("SELECT * FROM themes WHERE parent = :theme_id AND status = 1");
+            $query->execute(array(
+                ':theme_id' => $themeId
+            ));
+        }else{
+            $query = $this->db->prepare("SELECT * FROM themes WHERE parent = $themeId AND status = 1 ORDER BY date LIMIT $minCount, $maxCount");
+            $query->execute(array(
+                ':theme_id' => $themeId,
+                ':min_count' => $minCount,
+                ':max_count' => $maxCount
+            ));
+        }
+        
+        $data = $query->fetchAll(FETCH_MODE);
+        
+        if($data){
+            return $data;
+        }
+        
+        return false;
+    }
+    
+    public function getDateFromLastSubtheme($themeId){
+        Debug::addMsg('Datum des letzten Beitrags auslesen');
+        
+        $query = $this->db->prepare("SELECT date FROM themes WHERE parent = :theme_id ORDER BY id DESC LIMIT 1");
+        $query->execute(array(
+            ':theme_id' => $themeId
+        ));
+        
+        $data = $query->fetch(FETCH_MODE);
+
+        if(!empty($data)){
+            return $data;
+        }
+        
+        return false;
+    }
+    
+    public function getSubthemesFromThemeByDate($themeId, $from, $to){
+        Debug::addMsg('Unterthemen eines Themas innerhalb eines Zeitraums werden geladen');
+        
+        $query = $this->db->prepare("SELECT * FROM themes WHERE parent = :theme_id AND status = 1 AND date BETWEEN FROM_UNIXTIME(:from) AND FROM_UNIXTIME(:to)");
+        $query->execute(array(
+            ':theme_id' => $themeId,
+            ':from' => $from,
+            ':to' => $to
+        ));
+        
+        $data = $query->fetchAll(FETCH_MODE);
+        
+        if(!empty($data)){
+            return $data;
+        }
+        
+        return false;
     }
     
     public function getAllSubthemesByTheme($themeId){
