@@ -12,16 +12,17 @@ $likes = $this->getViewData('likes');
 
 <ul id="subthemes">
     <?php foreach ($subthemes as $subtheme): ?>
-    <li>
+    <li class="subtheme">
         <h2><?= $subtheme['name']; ?></h2>
         <p><?= $subtheme['date']; ?></p>
         <a href="<?= BASE_URL . '/user/new-opinion/' . $theme['link'] . '/' . $subtheme['link']; ?>">Deine Meinung</a>
         <?php if(!empty($this->getViewData('opinions'))): ?>
-        <ul>
+        <ul id="opinions">
             <?php foreach( $opinions[$subtheme['id']] as $data): ?>
-            <li>
+            <li class="opinion">
                 <h3><?= $data['title']; ?></h3>
                 <p><?= $data['text']; ?></p>
+                <p><?= $data['date']; ?></p>
                 <div class="rating">
                     <p class="like"><span class="count"><?= $likes[$data['id']]['likes'] !== NULL ? $likes[$data['id']]['likes'] : 0; ?> </span><a href="<?= BASE_URL . '/user/like/' . $subtheme['link'] . DIRECTORY_SEPARATOR . $data['id']; ?>">Zustimmen</a></p>
                     <p class="dislike"><span class="count"><?= $likes[$data['id']]['dislikes'] !== NULL ? $likes[$data['id']]['dislikes'] : 0; ?> </span><a href="<?= BASE_URL . '/user/dislike/' . $subtheme['link'] . DIRECTORY_SEPARATOR . $data['id']; ?>">Ablehnen</a></p>
