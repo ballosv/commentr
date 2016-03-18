@@ -15,6 +15,11 @@ Debug::addMsg('Theme-Controller wurde geladen');
         $link = $params[0];
         $minCount = isset($params[1]) ? $params[1] : NULL;
         $maxCount = isset($params[2]) ? $params[2] : NULL;
+        $loadMoreOpinions = (isset($params[3]) && $params[3] == 'load-more-opinions') ? true : false;
+        if($loadMoreOpinions === true){
+            $minOpinionCount = $params[4];
+            $maxOpinionCount = $params[5];
+        }
          
         // Die URL speichern, für den Fall, dass ein abgemeldeter User kommentieren will
 //        $themePage = '/theme/show-theme/' . $link;
@@ -62,7 +67,15 @@ Debug::addMsg('Theme-Controller wurde geladen');
         $likes = array();
         
         foreach ($subthemes as $subtheme){
-            $opinions[$subtheme['id']] = $this->model->getOpinionsBySubtheme($subtheme['id']);
+            // Gesamtzahl Meinung auslesen
+            $totalOpinionsCount[$subtheme['id']] = $this->model->getTotalOpinionCount($subtheme['id'])['total_count'];
+            // Opinions laden
+            if($loadMoreOpinions === true){
+                $opinions[$subtheme['id']] = $this->model->getOpinionsFromSubtheme($subtheme['id'], 'likes', $minOpinionCount, $maxOpinionCount);
+            }else{
+                $opinions[$subtheme['id']] = $this->model->getOpinionsFromSubtheme($subtheme['id'], 'likes');
+            }
+            // Likes der Opinions laden
             foreach($opinions[$subtheme['id']] as $opinion){
                 $like = $this->model->getLikesByOpinion($opinion['id'], 'count');
                 // Like nur speichern, wenn auch ein Datensatz vorhanden ist
@@ -85,6 +98,7 @@ Debug::addMsg('Theme-Controller wurde geladen');
         $this->view->setViewData('subthemes', $subthemes);
         $this->view->setViewData('total_subtheme_count', $totalCount);
         $this->view->setViewData('opinions', $opinions);
+        $this->view->setViewData('total_opinions_count', $totalOpinionsCount);
         $this->view->setViewData('likes', $likes);
         $this->view->setViewData('comments', $commments);
         

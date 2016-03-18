@@ -45,6 +45,19 @@ class Model {
         }
     }
     
+    public function getTotalThemeCount(){
+        $query = $this->db->prepare("SELECT COUNT(*) AS total_count FROM themes WHERE parent = 0 AND status = 1");
+        $query->execute();
+        
+        $data = $query->fetch(FETCH_MODE);
+        
+        if($data){
+            return $data;
+        }
+        
+        return false;
+    }
+    
     public function getTotalSubthemeCount($themeId){
         $query = $this->db->prepare("SELECT COUNT(*) AS total_count FROM themes WHERE parent = :theme_id AND status = 1");
         $query->execute(array(
@@ -60,9 +73,11 @@ class Model {
         return false;
     }
     
-    public function getTotalThemeCount(){
-        $query = $this->db->prepare("SELECT COUNT(*) AS total_count FROM themes WHERE parent = 0 AND status = 1");
-        $query->execute();
+    public function getTotalOpinionCount($themeId){
+        $query = $this->db->prepare("SELECT COUNT(*) AS total_count FROM opinions WHERE theme_id = :theme_id AND status = 1");
+        $query->execute(array(
+            ':theme_id' => $themeId
+        ));
         
         $data = $query->fetch(FETCH_MODE);
         
@@ -72,6 +87,8 @@ class Model {
         
         return false;
     }
+    
+    
 
 
     public function getSubthemesFromThemeByCount($themeId, $minCount = NULL, $maxCount = NULL){
@@ -151,28 +168,38 @@ class Model {
         }
     }
     
-    public function getOpinionsBySubtheme($themeId){
+    public function getOpinionsFromSubtheme($themeId, $filter = false, $minCount = 0, $maxCount = INITIAL_LOAD_COUNT){
         Debug::addMsg('Alle Meinungen eines Unterthemas werden geladen');
-//        $query = $this->db->prepare("SELECT * FROM opinions WHERE theme_id = :theme_id AND status = 1 ORDER BY date DESC");
-//        $query = $this->db->prepare("SELECT * FROM opinions WHERE theme_id = :theme_id AND status = 1 ORDER BY comments DESC, date DESC");
-        $query = $this->db->prepare("
-            SELECT 
-            opinions.id,
-            opinions.theme_id,
-            opinions.user_id,
-            opinions.title,
-            opinions.text,
-            opinions.date,
-            opinions.status,
-            opinions.comments,
-            opinion_has_likes.opinion_id,
-            COUNT(opinion_has_likes.like_status) AS like_count
-            FROM opinions
-            JOIN opinion_has_likes ON opinions.id = opinion_has_likes.opinion_id
-            WHERE opinions.theme_id = :theme_id AND opinions.status = 1
-            GROUP BY opinions.id
-            ORDER BY like_count DESC, opinions.date DESC"
-                );
+        // Default Filter läd Meinungen chronologisch sortiert
+        if($filter === false){
+            $query = $this->db->prepare("SELECT * FROM opinions WHERE theme_id = :theme_id AND status = 1 ORDER BY date LIMIT :min_count, :max_count");
+        }
+        
+        if($filter === 'comments'){
+            $query = $this->db->prepare("SELECT * FROM opinions WHERE theme_id = :theme_id AND status = 1 ORDER BY comments DESC, date DESC LIMIT :min_count, :max_count");
+        }
+        
+        if($filter === 'likes'){
+            $query = $this->db->prepare("
+                SELECT  
+                opinions.id,
+                opinions.theme_id,
+                opinions.user_id,
+                opinions.title,
+                opinions.text,
+                opinions.date,
+                opinions.status,
+                opinions.comments,
+                COUNT(opinion_has_likes.like_status) AS like_count
+                FROM opinions
+                LEFT JOIN opinion_has_likes ON opinion_has_likes.opinion_id = opinions.id
+                WHERE opinions.theme_id = :theme_id AND opinions.status = 1
+                GROUP BY opinions.id
+                ORDER BY like_count DESC, opinions.date DESC
+                LIMIT $minCount, $maxCount"
+            );
+        }
+        
         $query->execute(array(
             ':theme_id' => $themeId
         ));
