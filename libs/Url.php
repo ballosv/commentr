@@ -71,7 +71,6 @@ class Url {
     }
     
     public static function printUrl($format = false){
-        
         if(!empty(self::getParams())){
             
             foreach (self::getParams() as $param){
@@ -80,10 +79,10 @@ class Url {
         }
         
         if($format === true){
-            return DIRECTORY_SEPARATOR . self::getController() . DIRECTORY_SEPARATOR . self::getMethod('lcc') . $params;
+            return DIRECTORY_SEPARATOR . self::getController() . DIRECTORY_SEPARATOR . self::getMethod() . $params;
         }
         
-        return BASE_URL . DIRECTORY_SEPARATOR . self::getController() . DIRECTORY_SEPARATOR . self::getMethod('lcc') . $params;
+        return BASE_URL . DIRECTORY_SEPARATOR . self::getController() . DIRECTORY_SEPARATOR . self::getMethod() . $params;
     }
     
     public static function parseUrl(){

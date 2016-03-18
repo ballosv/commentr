@@ -1,11 +1,18 @@
 <?php 
+// Theme laden
 $theme = $this->getViewData('theme'); 
+// Subthemes laden
 $subthemes = $this->getViewData('subthemes');
 $totalSubthemeCount = $this->getViewData('total_subtheme_count');
 $loadSubthemeCount = (count($subthemes) + DEFAULT_LOAD_COUNT) > $totalSubthemeCount ? $totalSubthemeCount : (count($subthemes) + DEFAULT_LOAD_COUNT);
+// Meinungen laden
 $opinions = $this->getViewData('opinions');
-$comments = $this->getViewData('comments');
+$totalOpinionsCount = $this->getViewData('total_opinions_count');
+// Likes laden
 $likes = $this->getViewData('likes');
+// Kommentare laden
+//$comments = $this->getViewData('comments');
+
 ?>
 <h1><?= $theme['name']; ?></h1>
 <p><?= $theme['teaser']; ?></p>
@@ -16,8 +23,11 @@ $likes = $this->getViewData('likes');
         <h2><?= $subtheme['name']; ?></h2>
         <p><?= $subtheme['date']; ?></p>
         <a href="<?= BASE_URL . '/user/new-opinion/' . $theme['link'] . '/' . $subtheme['link']; ?>">Deine Meinung</a>
-        <?php if(!empty($this->getViewData('opinions'))): ?>
+        <?php if(!empty($opinions)): ?>
         <ul id="opinions">
+            <?php 
+            $loadOpinionsCount = (count($opinions[$subtheme['id']]) + DEFAULT_LOAD_COUNT) > $totalOpinionsCount[$subtheme['id']] ? $totalOpinionsCount[$subtheme['id']] : (count($subthemes[$subtheme['id']]) + DEFAULT_LOAD_COUNT);
+            ?>
             <?php foreach( $opinions[$subtheme['id']] as $data): ?>
             <li class="opinion">
                 <h3><?= $data['title']; ?></h3>
@@ -38,10 +48,12 @@ $likes = $this->getViewData('likes');
                     </li>
                 <?php endforeach; ?>
                 </ul>
-                
             </li>
             <?php endforeach; ?>
         </ul>
+        <?php if(count($opinions[$subtheme['id']]) != $loadOpinionsCount): ?>
+        <a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . 0 . DIRECTORY_SEPARATOR . $loadSubthemeCount . DIRECTORY_SEPARATOR . 'load-more-opinions' . DIRECTORY_SEPARATOR . 0 . DIRECTORY_SEPARATOR . $loadOpinionsCount; ?>">load more</a>
+        <?php endif; ?>
         <?php endif; ?>
         <ul></ul>
     </li>
