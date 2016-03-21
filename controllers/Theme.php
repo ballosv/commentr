@@ -12,9 +12,12 @@ Debug::addMsg('Theme-Controller wurde geladen');
     }
     
     public function showTheme($params){
+//        http://localhost:8888/theme/show-theme/fluechtlingskrise?pgn=2?ldc=20
+        
         $link = $params[0];
-        $currentPage = isset($params[1]) ? $params[1] : 1;
-        $pageCount = isset($params[2]) ? $params[2] : INITIAL_LOAD_COUNT;
+        $currentPage = isset(Url::getSubParams()['pgn']) ? Url::getSubParams()['pgn'] : 1;
+        $pageCount = isset(Url::getSubParams()['ldc']) ? Url::getSubParams()['ldc'] : INITIAL_LOAD_COUNT;
+        
 
 //        $minCount = isset($params[1]) ? $params[1] : NULL;
 //        $maxCount = isset($params[2]) ? $params[2] : NULL;
@@ -84,11 +87,7 @@ Debug::addMsg('Theme-Controller wurde geladen');
             // Gesamtzahl Meinung auslesen
             $totalOpinionsCount[$subtheme['id']] = $this->model->getTotalOpinionCount($subtheme['id'])['total_count'];
             // Opinions laden
-            if($loadMoreOpinions === true){
-                $opinions[$subtheme['id']] = $this->model->getOpinionsFromSubtheme($subtheme['id'], 'likes', $minOpinionCount, $maxOpinionCount);
-            }else{
-                $opinions[$subtheme['id']] = $this->model->getOpinionsFromSubtheme($subtheme['id'], 'likes');
-            }
+            $opinions[$subtheme['id']] = $this->model->getOpinionsFromSubtheme($subtheme['id'], 'likes');
             // Likes der Opinions laden
             foreach($opinions[$subtheme['id']] as $opinion){
                 $like = $this->model->getLikesByOpinion($opinion['id'], 'count');

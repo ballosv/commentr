@@ -70,12 +70,36 @@ class Url {
         }
     }
     
+    public function setSubParams($subParams){
+        // SubParams setzen
+        $GLOBALS['sub_params'] = $subParams;
+    }
+    
+    public function getSubParams($format = false){
+        if(!empty($GLOBALS['sub_params'])){
+            if($format === false){
+                return $GLOBALS['sub_params'];
+            }elseif($format === 'print'){
+                $output = '?';
+                foreach ($GLOBALS['sub_params'] as $key => $val){
+                    $output .= $key . '=' . $val . '&';
+                }
+                $output = rtrim($output, '&');
+
+                return $output;
+            }
+        }else{
+            return false;
+        }
+    }
+    
     public static function printUrl($format = false){
         if(!empty(self::getParams())){
             
             foreach (self::getParams() as $param){
                 $params .= '/' . $param;
             }
+            $params .= self::getSubParams('print');
         }
         
         if($format === true){
@@ -86,7 +110,9 @@ class Url {
     }
     
     public static function parseUrl(){
-        $url = filter_input(INPUT_GET, 'url');
+        $url = filter_input(INPUT_GET, 'url', FILTER_SANITIZE_STRING);
+        $pgn = filter_input(INPUT_GET, 'pgn', FILTER_SANITIZE_STRING);
+        $ldc = filter_input(INPUT_GET, 'ldc', FILTER_SANITIZE_STRING);
         // Prüfen ob ob URL-Parameter übergeben wurde
         if ($url) {
             // Letztes Slash aus der URL entfernen
@@ -113,6 +139,18 @@ class Url {
                 $params[] = $val;
             }
             self::setParams($params);
+            
+            $subParams;
+
+            if(!empty($pgn)){
+                $subParams['pgn'] = $pgn;
+            }
+            
+            if(!empty($ldc)){
+                $subParams['ldc'] = $ldc;
+            }
+            
+            self::setSubParams($subParams);
         }
     }
     
