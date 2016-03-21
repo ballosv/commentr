@@ -75,38 +75,38 @@ Debug::addMsg('Theme-Controller wurde geladen');
         /*
          * Meiungen, Kommentare und Likes bzw. Dislikes der Subthemes laden
          */
-//        $opinions = array();
-//        $AllOpinionsWithComments = array();
-//        $commments = array();
-//        $likes = array();
-//        
-//        foreach ($subthemes as $subtheme){
-//            // Gesamtzahl Meinung auslesen
-//            $totalOpinionsCount[$subtheme['id']] = $this->model->getTotalOpinionCount($subtheme['id'])['total_count'];
-//            // Opinions laden
-//            if($loadMoreOpinions === true){
-//                $opinions[$subtheme['id']] = $this->model->getOpinionsFromSubtheme($subtheme['id'], 'likes', $minOpinionCount, $maxOpinionCount);
-//            }else{
-//                $opinions[$subtheme['id']] = $this->model->getOpinionsFromSubtheme($subtheme['id'], 'likes');
+        $opinions = array();
+        $AllOpinionsWithComments = array();
+        $commments = array();
+        $likes = array();
+        
+        foreach ($subthemes as $subtheme){
+            // Gesamtzahl Meinung auslesen
+            $totalOpinionsCount[$subtheme['id']] = $this->model->getTotalOpinionCount($subtheme['id'])['total_count'];
+            // Opinions laden
+            if($loadMoreOpinions === true){
+                $opinions[$subtheme['id']] = $this->model->getOpinionsFromSubtheme($subtheme['id'], 'likes', $minOpinionCount, $maxOpinionCount);
+            }else{
+                $opinions[$subtheme['id']] = $this->model->getOpinionsFromSubtheme($subtheme['id'], 'likes');
+            }
+            // Likes der Opinions laden
+            foreach($opinions[$subtheme['id']] as $opinion){
+                $like = $this->model->getLikesByOpinion($opinion['id'], 'count');
+                // Like nur speichern, wenn auch ein Datensatz vorhanden ist
+                if($like !== FALSE){
+                    $likes[$opinion['id']] = $like;
+                }
+            }
+            
+//            $opinionsWidthComments = $this->model->getCommentedOpinionsBySubtheme($subtheme['id'], '');
+//            if($opinionsWidthComments !== NULL){
+//                $AllOpinionsWithComments[$subtheme['id']] = $opinionsWidthComments;
 //            }
-//            // Likes der Opinions laden
-//            foreach($opinions[$subtheme['id']] as $opinion){
-//                $like = $this->model->getLikesByOpinion($opinion['id'], 'count');
-//                // Like nur speichern, wenn auch ein Datensatz vorhanden ist
-//                if($like !== FALSE){
-//                    $likes[$opinion['id']] = $like;
-//                }
+//            // Kommentare auslesen
+//            foreach ($AllOpinionsWithComments[$subtheme['id']] as $opinion){
+//                $commments[$opinion['id']] = $this->model->getCommentsBySubtheme($opinion['id']);
 //            }
-//            
-////            $opinionsWidthComments = $this->model->getCommentedOpinionsBySubtheme($subtheme['id'], '');
-////            if($opinionsWidthComments !== NULL){
-////                $AllOpinionsWithComments[$subtheme['id']] = $opinionsWidthComments;
-////            }
-////            // Kommentare auslesen
-////            foreach ($AllOpinionsWithComments[$subtheme['id']] as $opinion){
-////                $commments[$opinion['id']] = $this->model->getCommentsBySubtheme($opinion['id']);
-////            }
-//        }
+        }
         
         $this->view->setViewData('theme', $theme);
         $this->view->setViewData('subthemes', $subthemes);
