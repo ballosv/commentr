@@ -10,11 +10,11 @@ $loadCount = (count($themes) + DEFAULT_LOAD_COUNT) > $totalCount ? $totalCount :
         <li class="theme">
             <h2><?= $theme['name']; ?></h2>
             <p><?= $theme['teaser']; ?></p>
-            <a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link']; ?>">Anzeigen</a>
+            <a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . '1'; ?>">Anzeigen</a>
         </li>
         <?php endforeach; ?>
     </ul>
     <?php if(count($themes) != $loadCount): ?>
-    <a href="<?= BASE_URL . '/index/load-themes/' . 0 . DIRECTORY_SEPARATOR . $loadCount; ?>">Show more</a>
+    <a href="<?= BASE_URL . '/index/load-themes/' . $loadCount; ?>">Show more</a>
     <?php endif; ?>
 </div>

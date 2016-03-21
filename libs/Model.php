@@ -168,15 +168,21 @@ class Model {
         }
     }
     
-    public function getOpinionsFromSubtheme($themeId, $filter = false, $minCount = 0, $maxCount = INITIAL_LOAD_COUNT){
+    public function getOpinionsFromSubtheme($themeId, $filter = false, $minCount = NULL, $maxCount = NULL){
         Debug::addMsg('Alle Meinungen eines Unterthemas werden geladen');
-        // Default Filter läd Meinungen chronologisch sortiert
+        if($minCount === NULL || $maxCount === NULL){
+            $limit;
+        }else{
+            $limit = "LIMIT $minCount, $maxCount";
+        }
+        
+        // Default Filter läd Meinungen chronologisch sortiert        
         if($filter === false){
-            $query = $this->db->prepare("SELECT * FROM opinions WHERE theme_id = :theme_id AND status = 1 ORDER BY date LIMIT :min_count, :max_count");
+            $query = $this->db->prepare("SELECT * FROM opinions WHERE theme_id = :theme_id AND status = 1 ORDER BY date $limit");
         }
         
         if($filter === 'comments'){
-            $query = $this->db->prepare("SELECT * FROM opinions WHERE theme_id = :theme_id AND status = 1 ORDER BY comments DESC, date DESC LIMIT :min_count, :max_count");
+            $query = $this->db->prepare("SELECT * FROM opinions WHERE theme_id = :theme_id AND status = 1 ORDER BY comments DESC, date DESC $limit");
         }
         
         if($filter === 'likes'){
@@ -196,7 +202,7 @@ class Model {
                 WHERE opinions.theme_id = :theme_id AND opinions.status = 1
                 GROUP BY opinions.id
                 ORDER BY like_count DESC, opinions.date DESC
-                LIMIT $minCount, $maxCount"
+                $limit"
             );
         }
         
@@ -206,11 +212,11 @@ class Model {
         
         $data = $query->fetchAll(FETCH_MODE);
         
-        $rowCount = $query->rowCount();
-        
-        if($rowCount > 0){
+        if($data){
             return $data;
         }
+        
+        return false;
     }
     
     public function getCommentedOpinionsBySubtheme($themeId){
