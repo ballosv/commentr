@@ -13,13 +13,16 @@ Debug::addMsg('Theme-Controller wurde geladen');
     
     public function showTheme($params){
         $link = $params[0];
-        $minCount = isset($params[1]) ? $params[1] : NULL;
-        $maxCount = isset($params[2]) ? $params[2] : NULL;
-        $loadMoreOpinions = (isset($params[3]) && $params[3] == 'load-more-opinions') ? true : false;
-        if($loadMoreOpinions === true){
-            $minOpinionCount = $params[4];
-            $maxOpinionCount = $params[5];
-        }
+        $currentPage = isset($params[1]) ? $params[1] : 1;
+        $pageCount = isset($params[2]) ? $params[2] : INITIAL_LOAD_COUNT;
+
+//        $minCount = isset($params[1]) ? $params[1] : NULL;
+//        $maxCount = isset($params[2]) ? $params[2] : NULL;
+//        $loadMoreOpinions = (isset($params[3]) && $params[3] == 'load-more-opinions') ? true : false;
+//        if($loadMoreOpinions === true){
+//            $minOpinionCount = $params[4];
+//            $maxOpinionCount = $params[5];
+//        }
          
         // Die URL speichern, für den Fall, dass ein abgemeldeter User kommentieren will
 //        $themePage = '/theme/show-theme/' . $link;
@@ -33,69 +36,82 @@ Debug::addMsg('Theme-Controller wurde geladen');
         $theme = $this->model->getThemeByLink($link);
         
         /*
+         * Pagnation erstellen
+         */
+        // Anzahl vorhandener Subthemen für Pagination speichern
+        $totalCount = $this->model->getTotalSubthemeCount($theme['id'])['total_count'];
+        // Anzahl Seiten berechnen
+        $totalPages = ceil($totalCount / $pageCount);
+        
+        /*
          * Die Subthemen laden
          */
-        // Anzahl vorhandener Subthemen speichern
-        $totalCount = $this->model->getTotalSubthemeCount($theme['id'])['total_count'];
         
-        // Wenn min- und maxCount nicht definiert sind und es mehr Subthemes gibt als initial geladen werden sollen,
-        // dann sollen die Subthemes der letzten drei Tage ausgehend vom letzten Subtheme laden werden
-        if($minCount === NULL || $maxCount === NULL || INITIAL_LOAD_COUNT < $totalCount){
-            // Das Datum des letzten Subthemes laden
-            $lastSubthemeDate = $this->model->getDateFromLastSubtheme($theme['id']);
-            // Die letzten Subthemes laden
-            $from = strtotime($lastSubthemeDate['date']) - DEFAULT_PERIOD;
-            $to = time();
-            $subthemes = $this->model->getSubthemesFromThemeByDate($theme['id'], $from, $to);
-            // Wenn es zu wenig Subthemes gibt, soll eine Mindestmenge geladen werden
-            if(count($subthemes) < INITIAL_LOAD_COUNT){
-                $subthemes = $this->model->getSubthemesFromThemeByCount($theme['id'], 0, INITIAL_LOAD_COUNT);
-            }
-        }else{
-            // Wenn min- und maxCount vorhanden sind, die entsprechenden Subthemes laden
-            $maxCount = $totalCount >= $maxCount ? $maxCount : $totalCount;
-            $subthemes = $this->model->getSubthemesFromThemeByCount($theme['id'], $minCount, $maxCount);
-        }
+        // Die Subthemes für die angegeben Seite laden. $pageCount bestimmt dabei
+        // die Menge der zu ladenden Subthemes
+        $minCount = ($currentPage - 1) * $pageCount;
+        $maxCount = $currentPage * $pageCount;
+        $subthemes = $this->model->getSubthemesFromThemeByCount($theme['id'], $minCount, $maxCount);
+        
+        
+//        if($minCount === NULL || $maxCount === NULL || INITIAL_LOAD_COUNT < $totalCount){
+//            // Das Datum des letzten Subthemes laden
+//            $lastSubthemeDate = $this->model->getDateFromLastSubtheme($theme['id']);
+//            // Die letzten Subthemes laden
+//            $from = strtotime($lastSubthemeDate['date']) - DEFAULT_PERIOD;
+//            $to = time();
+//            $subthemes = $this->model->getSubthemesFromThemeByDate($theme['id'], $from, $to);
+//            // Wenn es zu wenig Subthemes gibt, soll eine Mindestmenge geladen werden
+//            if(count($subthemes) < INITIAL_LOAD_COUNT){
+//                $subthemes = $this->model->getSubthemesFromThemeByCount($theme['id'], 0, INITIAL_LOAD_COUNT);
+//            }
+//        }else{
+//            // Wenn min- und maxCount vorhanden sind, die entsprechenden Subthemes laden
+//            $maxCount = $totalCount >= $maxCount ? $maxCount : $totalCount;
+//            $subthemes = $this->model->getSubthemesFromThemeByCount($theme['id'], $minCount, $maxCount);
+//        }
         
         
         /*
          * Meiungen, Kommentare und Likes bzw. Dislikes der Subthemes laden
          */
-        $opinions = array();
-        $AllOpinionsWithComments = array();
-        $commments = array();
-        $likes = array();
-        
-        foreach ($subthemes as $subtheme){
-            // Gesamtzahl Meinung auslesen
-            $totalOpinionsCount[$subtheme['id']] = $this->model->getTotalOpinionCount($subtheme['id'])['total_count'];
-            // Opinions laden
-            if($loadMoreOpinions === true){
-                $opinions[$subtheme['id']] = $this->model->getOpinionsFromSubtheme($subtheme['id'], 'likes', $minOpinionCount, $maxOpinionCount);
-            }else{
-                $opinions[$subtheme['id']] = $this->model->getOpinionsFromSubtheme($subtheme['id'], 'likes');
-            }
-            // Likes der Opinions laden
-            foreach($opinions[$subtheme['id']] as $opinion){
-                $like = $this->model->getLikesByOpinion($opinion['id'], 'count');
-                // Like nur speichern, wenn auch ein Datensatz vorhanden ist
-                if($like !== FALSE){
-                    $likes[$opinion['id']] = $like;
-                }
-            }
-            
-//            $opinionsWidthComments = $this->model->getCommentedOpinionsBySubtheme($subtheme['id'], '');
-//            if($opinionsWidthComments !== NULL){
-//                $AllOpinionsWithComments[$subtheme['id']] = $opinionsWidthComments;
+//        $opinions = array();
+//        $AllOpinionsWithComments = array();
+//        $commments = array();
+//        $likes = array();
+//        
+//        foreach ($subthemes as $subtheme){
+//            // Gesamtzahl Meinung auslesen
+//            $totalOpinionsCount[$subtheme['id']] = $this->model->getTotalOpinionCount($subtheme['id'])['total_count'];
+//            // Opinions laden
+//            if($loadMoreOpinions === true){
+//                $opinions[$subtheme['id']] = $this->model->getOpinionsFromSubtheme($subtheme['id'], 'likes', $minOpinionCount, $maxOpinionCount);
+//            }else{
+//                $opinions[$subtheme['id']] = $this->model->getOpinionsFromSubtheme($subtheme['id'], 'likes');
 //            }
-//            // Kommentare auslesen
-//            foreach ($AllOpinionsWithComments[$subtheme['id']] as $opinion){
-//                $commments[$opinion['id']] = $this->model->getCommentsBySubtheme($opinion['id']);
+//            // Likes der Opinions laden
+//            foreach($opinions[$subtheme['id']] as $opinion){
+//                $like = $this->model->getLikesByOpinion($opinion['id'], 'count');
+//                // Like nur speichern, wenn auch ein Datensatz vorhanden ist
+//                if($like !== FALSE){
+//                    $likes[$opinion['id']] = $like;
+//                }
 //            }
-        }
+//            
+////            $opinionsWidthComments = $this->model->getCommentedOpinionsBySubtheme($subtheme['id'], '');
+////            if($opinionsWidthComments !== NULL){
+////                $AllOpinionsWithComments[$subtheme['id']] = $opinionsWidthComments;
+////            }
+////            // Kommentare auslesen
+////            foreach ($AllOpinionsWithComments[$subtheme['id']] as $opinion){
+////                $commments[$opinion['id']] = $this->model->getCommentsBySubtheme($opinion['id']);
+////            }
+//        }
         
         $this->view->setViewData('theme', $theme);
         $this->view->setViewData('subthemes', $subthemes);
+        $this->view->setViewData('current_page', $currentPage);
+        $this->view->setViewData('total_pages', $totalPages);
         $this->view->setViewData('total_subtheme_count', $totalCount);
         $this->view->setViewData('opinions', $opinions);
         $this->view->setViewData('total_opinions_count', $totalOpinionsCount);
