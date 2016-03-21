@@ -6,5 +6,7 @@ class Theme_Model extends Model {
         parent::__construct();
         Debug::addMsg('Theme_Model wurde geladen');
     }
+    
+    
 
 }
