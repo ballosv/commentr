@@ -38,7 +38,7 @@ class Bootstrap {
         $controllerName = ucfirst($this->controller);
         require_once CONTROLLER_PATH . DIRECTORY_SEPARATOR . $controllerName . '.php';
         $controller = new $controllerName;
-        $controller->loadModel($controllerName);
+        $loadModel = $controller->loadModel($controllerName);
         $controller->setTemplateView($this->controller);  
         
         if ($this->method && !empty($this->method)) {
@@ -51,10 +51,13 @@ class Bootstrap {
                     // Methode des Controllers durch variable bzw. dynamische Variable ohne Parameter ausführen 
                     $controller->{$this->method}();
                 }
+            }else{
+                header('Location: ' . BASE_URL . DIRECTORY_SEPARATOR . 'error/error-404');
             }
         }
         
         $controller->index();
+        
         if(Url::getController() !== 'login'){
             Url::setLastPage();
         }

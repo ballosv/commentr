@@ -168,6 +168,20 @@ class Model {
         }
     }
     
+    public function getSubthemeByLink($subthemeLink, $themeId){
+        Debug::addMsg('Subtheme wird geladen');
+        $query = $this->db->prepare("SELECT * FROM themes WHERE link = :subtheme_link AND parent = :theme_id AND status = 1");
+        $query->execute(array(
+            ':subtheme_link' => $subthemeLink,
+            ':theme_id' => $themeId
+        ));
+        $data = $query->fetch(FETCH_MODE);
+        
+        if($data){
+            return $data;
+        }
+    }
+    
     public function getOpinionsFromSubtheme($themeId, $filter = false, $minCount = NULL, $maxCount = NULL){
         Debug::addMsg('Alle Meinungen eines Unterthemas werden geladen');
         if($minCount === NULL || $maxCount === NULL){

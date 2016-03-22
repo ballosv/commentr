@@ -11,24 +11,14 @@ Debug::addMsg('Theme-Controller wurde geladen');
         $this->renderView();
     }
     
-    public function showTheme($params){
-//        http://localhost:8888/theme/show-theme/fluechtlingskrise?pgn=2?ldc=20
+    public function showThemes($params){
+//        http://localhost:8888/theme/show-themes/fluechtlingskrise?pgn=2?ldc=20
         
         $link = $params[0];
         $currentPage = isset(Url::getSubParams()['pgn']) ? Url::getSubParams()['pgn'] : 1;
         $pageCount = isset(Url::getSubParams()['ldc']) ? Url::getSubParams()['ldc'] : INITIAL_LOAD_COUNT;
-        
-
-//        $minCount = isset($params[1]) ? $params[1] : NULL;
-//        $maxCount = isset($params[2]) ? $params[2] : NULL;
-//        $loadMoreOpinions = (isset($params[3]) && $params[3] == 'load-more-opinions') ? true : false;
-//        if($loadMoreOpinions === true){
-//            $minOpinionCount = $params[4];
-//            $maxOpinionCount = $params[5];
-//        }
          
         // Die URL speichern, für den Fall, dass ein abgemeldeter User kommentieren will
-//        $themePage = '/theme/show-theme/' . $link;
         $themePage = Url::printUrl(true);
         // Die Themenseite in die Session speichern
         Url::setTempUrl('theme_page', $themePage);
@@ -56,25 +46,6 @@ Debug::addMsg('Theme-Controller wurde geladen');
         $maxCount = $currentPage * $pageCount;
         $subthemes = $this->model->getSubthemesFromThemeByCount($theme['id'], $minCount, $maxCount);
         
-        
-//        if($minCount === NULL || $maxCount === NULL || INITIAL_LOAD_COUNT < $totalCount){
-//            // Das Datum des letzten Subthemes laden
-//            $lastSubthemeDate = $this->model->getDateFromLastSubtheme($theme['id']);
-//            // Die letzten Subthemes laden
-//            $from = strtotime($lastSubthemeDate['date']) - DEFAULT_PERIOD;
-//            $to = time();
-//            $subthemes = $this->model->getSubthemesFromThemeByDate($theme['id'], $from, $to);
-//            // Wenn es zu wenig Subthemes gibt, soll eine Mindestmenge geladen werden
-//            if(count($subthemes) < INITIAL_LOAD_COUNT){
-//                $subthemes = $this->model->getSubthemesFromThemeByCount($theme['id'], 0, INITIAL_LOAD_COUNT);
-//            }
-//        }else{
-//            // Wenn min- und maxCount vorhanden sind, die entsprechenden Subthemes laden
-//            $maxCount = $totalCount >= $maxCount ? $maxCount : $totalCount;
-//            $subthemes = $this->model->getSubthemesFromThemeByCount($theme['id'], $minCount, $maxCount);
-//        }
-        
-        
         /*
          * Meiungen, Kommentare und Likes bzw. Dislikes der Subthemes laden
          */
@@ -87,7 +58,7 @@ Debug::addMsg('Theme-Controller wurde geladen');
             // Gesamtzahl Meinung auslesen
             $totalOpinionsCount[$subtheme['id']] = $this->model->getTotalOpinionCount($subtheme['id'])['total_count'];
             // Opinions laden
-            $opinions[$subtheme['id']] = $this->model->getOpinionsFromSubtheme($subtheme['id'], 'likes');
+            $opinions[$subtheme['id']] = $this->model->getOpinionsFromSubtheme($subtheme['id'], 'likes', 0, INITIAL_LOAD_COUNT);
             // Likes der Opinions laden
             foreach($opinions[$subtheme['id']] as $opinion){
                 $like = $this->model->getLikesByOpinion($opinion['id'], 'count');
@@ -116,68 +87,48 @@ Debug::addMsg('Theme-Controller wurde geladen');
         $this->view->setViewData('total_opinions_count', $totalOpinionsCount);
         $this->view->setViewData('likes', $likes);
         $this->view->setViewData('comments', $commments);
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
 
+        $this->setViewFile('show_themes');
+    }
+    
+    public function openTheme($params){
+        $themeLink = $params[0];
+        $subthemeLink = $params[1];
         
+        // Die URL speichern, für den Fall, dass ein abgemeldeter User kommentieren will
+        $themePage = Url::printUrl(true);
+        // Die Themenseite in die Session speichern
+        Url::setTempUrl('theme_page', $themePage);
         
+        $currentPage = isset(Url::getSubParams()['pgn']) ? Url::getSubParams()['pgn'] : 1;
+        $pageCount = isset(Url::getSubParams()['ldc']) ? Url::getSubParams()['ldc'] : INITIAL_LOAD_COUNT;
         
-        
-        
-        
-        
-        
-        
-        
-        
-//        $subthemes = $this->model->getAllSubthemesByTheme($theme['id']);
-        
+        // Theme und Subtheme laden
+        $theme = $this->model->getThemeByLink($themeLink);
+        $subtheme = $this->model->getSubthemeByLink($subthemeLink, $theme['id']);
 
-        // Funktioniert hier nicht, weil noch nicht bekannt ist, zu welchem Subtheme eine Meinung gespeichert werden soll
-//        $redirectUrl = '/user/new-opinion/' . $theme['link'] . '/' . $link;
-//        Url::setRedirectPage($redirectUrl);
+        $totalOpinionsCount = $this->model->getTotalOpinionCount($subtheme['id'])['total_count'];;
         
-        // Alle Meinungen, Kommentare und Likes bzw. Dislikes der Subthemes auslesen und speichern
-//        $opinions = array();
-//        $AllOpinionsWithComments = array();
-//        $commments = array();
-//        $likes = array();
-//        
-//        foreach ($subthemes as $subtheme){
-//            $opinions[$subtheme['id']] = $this->model->getOpinionsBySubtheme($subtheme['id']);
-//            foreach($opinions[$subtheme['id']] as $opinion){
-//                $like = $this->model->getLikesByOpinion($opinion['id'], 'count');
-//                // Like nur speichern, wenn auch ein Datensatz vorhanden ist
-//                if($like !== FALSE){
-//                    $likes[$opinion['id']] = $like;
-//                }
-//            }
-//            
-//            $opinionsWidthComments = $this->model->getCommentedOpinionsBySubtheme($subtheme['id'], '');
-//            if($opinionsWidthComments !== NULL){
-//                $AllOpinionsWithComments[$subtheme['id']] = $opinionsWidthComments;
-//            }
-//            // Kommentare auslesen
-//            foreach ($AllOpinionsWithComments[$subtheme['id']] as $opinion){
-//                $commments[$opinion['id']] = $this->model->getCommentsBySubtheme($opinion['id']);
-//            }
-//        }
-//        
-//        $this->view->setViewData('opinions', $opinions);
-//        $this->view->setViewData('comments', $commments);
-//        $this->view->setViewData('likes', $likes);
-//        
-        $this->setViewFile('show_theme');
+        // Opinions laden
+        $opinions = $this->model->getOpinionsFromSubtheme($subtheme['id'], 'likes');
+        
+        // Likes der Opinions laden
+        foreach($opinions as $opinion){
+            $like = $this->model->getLikesByOpinion($opinion['id'], 'count');
+            // Like nur speichern, wenn auch ein Datensatz vorhanden ist
+            if($like !== FALSE){
+                $likes[$opinion['id']] = $like;
+            }
+        }
+        
+        $this->view->setViewData('theme', $theme);
+        $this->view->setViewData('subtheme', $subtheme);
+//        $this->view->setViewData('current_page', $currentPage);
+        $this->view->setViewData('opinions', $opinions);
+        $this->view->setViewData('total_opinions_count', $totalOpinionsCount);
+        $this->view->setViewData('likes', $likes);
+        
+        $this->setViewFile('open_theme');
     }
 
 }

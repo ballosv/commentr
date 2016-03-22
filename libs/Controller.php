@@ -36,7 +36,11 @@ class Controller {
         if(file_exists($modelPath)){
             require_once $modelPath;
             $this->model = new $model();
+            
+            return true;
         }
+        
+        return false;
     }
     
     // Methode ruft die Render-Methode im View auf und übergibt Template-Ordner und Datei
