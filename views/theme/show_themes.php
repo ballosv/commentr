@@ -36,7 +36,7 @@ $likes = $this->getViewData('likes');
         <?php $opinions = $allOpinions[$subtheme['id']]; ?>
         <?php if(!empty($opinions)): ?>
         <?php include 'partials/opinions.php'; ?>
-        <a href="<?= BASE_URL . '/theme/open-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . $subtheme['link'] . '?pgn=1'; ?>">open</a>
+        <a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . $subtheme['link'] . '?pgn=1'; ?>">open</a>
         <?php endif; ?>
         
         <ul></ul>

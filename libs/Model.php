@@ -233,6 +233,34 @@ class Model {
         return false;
     }
     
+    public function getCommentsByOpinion($opinionId){
+        Debug::addMsg('Alle Kommentare einer Meinung auslesen');
+        
+        $query = $this->db->prepare("
+                SELECT 
+                comments.id,
+                comments.opinion_id,
+                comments.user_id,
+                comments.title,
+                comments.text,
+                comments.date,
+                users.name AS username
+                FROM comments 
+                JOIN users ON comments.user_id = users.id
+                WHERE opinion_id = :opinion_id 
+                ORDER BY date DESC
+                ");
+        $query->execute(array(
+            ':opinion_id' => $opinionId
+        ));
+        
+        $data = $query->fetchAll(FETCH_MODE);
+        
+        if($data){
+            return $data;
+        }
+    }
+    
     public function getCommentedOpinionsBySubtheme($themeId){
         Debug::addMsg('Alle kommentierten Meinungen eines Unterthemas werden geladen');
         $query = $this->db->prepare("SELECT * FROM opinions WHERE theme_id = :theme_id AND status = 1 AND comments > 0 ORDER BY date DESC");

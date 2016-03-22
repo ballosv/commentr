@@ -37,15 +37,15 @@ class User extends Controller {
         }
     }
     
-    public function newComment($param){
-        $this->view->setViewData('subtheme_link', $param[0]);
-        $this->view->setViewData('opinion_id', $param[1]);
+    public function newComment($params){
+        $this->view->setViewData('subtheme_link', $params[0]);
+        $this->view->setViewData('opinion_id', $params[1]);
         $this->setViewFile('new_comment');
     }
     
-    public function createNewComment($param){
+    public function createNewComment($params){
         Debug::addMsg('Neuer Kommentar wird erstellt.');
-        $saveComment = $this->model->createNewComment($param[1]);
+        $saveComment = $this->model->createNewComment($params[1]);
         
         if($saveComment === true){
             header('Location: ' . Url::getTempUrl('theme_page'));

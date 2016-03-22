@@ -67,15 +67,6 @@ Debug::addMsg('Theme-Controller wurde geladen');
                     $likes[$opinion['id']] = $like;
                 }
             }
-            
-//            $opinionsWidthComments = $this->model->getCommentedOpinionsBySubtheme($subtheme['id'], '');
-//            if($opinionsWidthComments !== NULL){
-//                $AllOpinionsWithComments[$subtheme['id']] = $opinionsWidthComments;
-//            }
-//            // Kommentare auslesen
-//            foreach ($AllOpinionsWithComments[$subtheme['id']] as $opinion){
-//                $commments[$opinion['id']] = $this->model->getCommentsBySubtheme($opinion['id']);
-//            }
         }
         
         $this->view->setViewData('theme', $theme);
@@ -91,7 +82,7 @@ Debug::addMsg('Theme-Controller wurde geladen');
         $this->setViewFile('show_themes');
     }
     
-    public function openTheme($params){
+    public function showTheme($params){
         $themeLink = $params[0];
         $subthemeLink = $params[1];
         
@@ -102,15 +93,25 @@ Debug::addMsg('Theme-Controller wurde geladen');
         
         $currentPage = isset(Url::getSubParams()['pgn']) ? Url::getSubParams()['pgn'] : 1;
         $pageCount = isset(Url::getSubParams()['ldc']) ? Url::getSubParams()['ldc'] : INITIAL_LOAD_COUNT;
+        $commentId = isset(Url::getSubParams()['com']) ? Url::getSubParams()['com'] : NULL;
         
         // Theme und Subtheme laden
         $theme = $this->model->getThemeByLink($themeLink);
         $subtheme = $this->model->getSubthemeByLink($subthemeLink, $theme['id']);
 
+        /*
+         * Pagnation erstellen
+         */
+        // Anzahl vorhandener Subthemen für Pagination speichern
         $totalOpinionsCount = $this->model->getTotalOpinionCount($subtheme['id'])['total_count'];;
+        // Anzahl Seiten berechnen
+        $totalPages = ceil($totalOpinionsCount / $pageCount);
+        
         
         // Opinions laden
-        $opinions = $this->model->getOpinionsFromSubtheme($subtheme['id'], 'likes');
+        $minCount = ($currentPage - 1) * $pageCount;
+        $maxCount = $currentPage * $pageCount;
+        $opinions = $this->model->getOpinionsFromSubtheme($subtheme['id'], 'likes', $minCount, $maxCount);
         
         // Likes der Opinions laden
         foreach($opinions as $opinion){
@@ -121,14 +122,33 @@ Debug::addMsg('Theme-Controller wurde geladen');
             }
         }
         
+        if($commentId !== NULL){
+            $comments = $this->model->getCommentsByOpinion($commentId);
+            if($comments){
+                $this->view->setViewData('comments', $comments);
+            }
+        }
+        
+//            $opinionsWithComments = $this->model->getCommentedOpinionsBySubtheme($subtheme['id']);
+//            var_dump($opinionsWithComments);
+//            if($opinionsWithComments !== NULL){
+//                $AllOpinionsWithComments[$subtheme['id']] = $opinionsWithComments;
+//            }
+//            // Kommentare auslesen
+//            foreach ($AllOpinionsWithComments[$subtheme['id']] as $opinion){
+//                $commments[$opinion['id']] = $this->model->getCommentsBySubtheme($opinion['id']);
+//            }
+        
+        
         $this->view->setViewData('theme', $theme);
         $this->view->setViewData('subtheme', $subtheme);
-//        $this->view->setViewData('current_page', $currentPage);
         $this->view->setViewData('opinions', $opinions);
         $this->view->setViewData('total_opinions_count', $totalOpinionsCount);
+        $this->view->setViewData('current_page', $currentPage);
+        $this->view->setViewData('total_pages', $totalPages);
         $this->view->setViewData('likes', $likes);
         
-        $this->setViewFile('open_theme');
+        $this->setViewFile('show_theme');
     }
 
 }
