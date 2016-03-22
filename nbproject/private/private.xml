@@ -13,11 +13,13 @@
         </group>
         <group name="work_commentr">
             <file>file:/Users/ballosv/_git_projects/commentr/controllers/Index.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/libs/Bootstrap.php</file>
             <file>file:/Users/ballosv/_git_projects/commentr/config.php</file>
             <file>file:/Users/ballosv/_git_projects/commentr/views/index/index.php</file>
             <file>file:/Users/ballosv/_git_projects/commentr/controllers/Theme.php</file>
             <file>file:/Users/ballosv/_git_projects/commentr/libs/Model.php</file>
             <file>file:/Users/ballosv/_git_projects/commentr/views/theme/show_theme.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/libs/Url.php</file>
         </group>
     </open-files>
 </project-private>

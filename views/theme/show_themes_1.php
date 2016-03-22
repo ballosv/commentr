@@ -21,9 +21,9 @@ $likes = $this->getViewData('likes');
 <div id="filter">
     <p>Anzeige pro Seite: </p>
     <ul>
-        <li><a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . '?pgn=1&ldc=5'; ?>">5</a></li>
-        <li><a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . '?pgn=1&ldc=10'; ?>">10</a></li>
-        <li><a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . '?pgn=1&ldc=20'; ?>">20</a></li>
+        <li><a href="<?= BASE_URL . '/theme/show-themes/' . $theme['link'] . '?pgn=1&ldc=5'; ?>">5</a></li>
+        <li><a href="<?= BASE_URL . '/theme/show-themes/' . $theme['link'] . '?pgn=1&ldc=10'; ?>">10</a></li>
+        <li><a href="<?= BASE_URL . '/theme/show-themes/' . $theme['link'] . '?pgn=1&ldc=20'; ?>">20</a></li>
     </ul>
 </div>
 <ul id="subthemes">
@@ -48,7 +48,7 @@ $likes = $this->getViewData('likes');
                 </div>
                 <p>Anzahl Kommentare: <?= $data['comments']; ?></p>
                 <a href="<?= BASE_URL . '/user/new-comment/' . $subtheme['link'] . DIRECTORY_SEPARATOR . $data['id']; ?>">Kommentieren</a>
-                <a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . 0 . DIRECTORY_SEPARATOR . $loadSubthemeCount . DIRECTORY_SEPARATOR . 'load-comments' . DIRECTORY_SEPARATOR . 0 . DIRECTORY_SEPARATOR . $loadOpinionsCount; ?>">load comments</a>
+                <a href="<?= BASE_URL . '/theme/show-themes/' . $theme['link'] . DIRECTORY_SEPARATOR . 0 . DIRECTORY_SEPARATOR . $loadSubthemeCount . DIRECTORY_SEPARATOR . 'load-comments' . DIRECTORY_SEPARATOR . 0 . DIRECTORY_SEPARATOR . $loadOpinionsCount; ?>">load comments</a>
                 <ul class="comments">
                 <?php foreach ($comments[$data['id']] as $comment): ?>
                     <li>
@@ -61,9 +61,11 @@ $likes = $this->getViewData('likes');
             </li>
             <?php endforeach; ?>
         </ul>
-        <?php if(count($opinions[$subtheme['id']]) != $loadOpinionsCount): ?>
-        <a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . $currentPage . DIRECTORY_SEPARATOR . 'load-more-opinions' . DIRECTORY_SEPARATOR . $loadOpinionsCount; ?>">load more</a>
-        <?php endif; ?>
+        <a href="<?= BASE_URL . '/theme/open-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . $subtheme['link'] . '?pgn=1'; ?>">open</a>
+        <!-- Anzeigen eines load-more-btn um mehr opinions zu laden.  -->
+        <?php // if(count($opinions[$subtheme['id']]) != $loadOpinionsCount): ?>
+        <!--<a href="//<?= BASE_URL . '/theme/show-themes/' . $theme['link'] . DIRECTORY_SEPARATOR . $currentPage . DIRECTORY_SEPARATOR . 'load-more-opinions' . DIRECTORY_SEPARATOR . $loadOpinionsCount; ?>">load more</a>-->
+        <?php // endif; ?>
         <?php endif; ?>
         <ul></ul>
     </li>
@@ -71,12 +73,12 @@ $likes = $this->getViewData('likes');
 </ul>
 <?php if($totalPages > 1): ?>
 <?php if($prevPage != $currentPage): ?>
-<a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . '?pgn=' . $prevPage; ?>">zurück</a>
+<a href="<?= BASE_URL . '/theme/show-themes/' . $theme['link'] . '?pgn=' . $prevPage; ?>">zurück</a>
 <?php endif; ?>
 <?php for ($i = 1 ; $i <= $totalPages ; $i++): ?>
-<a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . '?pgn=' . $i; ?>"><?= $i; ?></a>
+<a href="<?= BASE_URL . '/theme/show-themes/' . $theme['link'] . '?pgn=' . $i; ?>"><?= $i; ?></a>
 <?php endfor; ?>
 <?php if($nextPage > $currentPage): ?>
-<a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . '?pgn=' . $nextPage; ?>">weiter</a>
+<a href="<?= BASE_URL . '/theme/show-themes/' . $theme['link'] . '?pgn=' . $nextPage; ?>">weiter</a>
 <?php endif; ?>
 <?php endif; ?>
