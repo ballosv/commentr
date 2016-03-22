@@ -61,7 +61,7 @@ $likes = $this->getViewData('likes');
             </li>
             <?php endforeach; ?>
         </ul>
-        <a href="<?= BASE_URL . '/theme/open-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . $subtheme['link'] . '?pgn=1'; ?>">open</a>
+        <a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . $subtheme['link'] . '?pgn=1'; ?>">open</a>
         <!-- Anzeigen eines load-more-btn um mehr opinions zu laden.  -->
         <?php // if(count($opinions[$subtheme['id']]) != $loadOpinionsCount): ?>
         <!--<a href="//<?= BASE_URL . '/theme/show-themes/' . $theme['link'] . DIRECTORY_SEPARATOR . $currentPage . DIRECTORY_SEPARATOR . 'load-more-opinions' . DIRECTORY_SEPARATOR . $loadOpinionsCount; ?>">load more</a>-->

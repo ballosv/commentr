@@ -10,7 +10,7 @@
         </div>
         <p>Anzahl Kommentare: <?= $opinion['comments']; ?></p>
         <a href="<?= BASE_URL . '/user/new-comment/' . $subtheme['link'] . DIRECTORY_SEPARATOR . $opinion['id']; ?>">Kommentieren</a>
-        <a href="<?= BASE_URL . '/theme/show-themes/' . $theme['link'] . DIRECTORY_SEPARATOR . 0 . DIRECTORY_SEPARATOR . $loadSubthemeCount . DIRECTORY_SEPARATOR . 'load-comments' . DIRECTORY_SEPARATOR . 0 . DIRECTORY_SEPARATOR . $loadOpinionsCount; ?>">load comments</a>
+        <a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . $subtheme['link'] . '?pgn=' . $currentPage . '&com=' . $opinion['id']; ?>">load comments</a>
         <?php include 'comments.php'; ?>
     </li>
     <?php endforeach; ?>

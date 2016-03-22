@@ -13,6 +13,7 @@ body{
     max-width: 1200px;
     margin: 0 auto;
     text-align: center;
+    overflow: hidden;
 }
 
 #page-header{
@@ -69,6 +70,16 @@ h2{
 
 h3{
     font-size: 14px;
+}
+
+#content{
+    float: left;
+    width: 70%;
+}
+
+#comments{
+    float: right;
+    width: 30%;
 }
 
 .subtheme{

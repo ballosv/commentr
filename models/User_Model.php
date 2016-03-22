@@ -70,12 +70,12 @@ class User_Model extends Model {
             ));
             
             // Die zuletzt gespeicherte ID
-            $lastId = $this->db->lastInsertId();
+//            $lastId = $this->db->lastInsertId();
             
             // Anzahl Kommentare erhöhen
-            $query = $this->db->prepare("UPDATE opinions SET comments = comments+1 WHERE id = :last_id");
+            $query = $this->db->prepare("UPDATE opinions SET comments = comments+1 WHERE id = :opinion_id");
             $save = $query->execute(array(
-                ':last_id' => $lastId
+                ':opinion_id' => $opinionId
             ));
             
             /*
