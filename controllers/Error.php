@@ -29,6 +29,11 @@ Debug::addMsg('Fehlerseite 404 geladen');
         $this->view->setViewData('Beim Speichern des Themas ist ein Fehler aufgetreten');
     }
     
+    public function errorSaveTopic(){
+        $this->setViewFile('error_save_topic');
+        $this->view->setViewData('Beim Speichern des Topics ist ein Fehler aufgetreten');
+    }
+    
     public function errorSaveOpinion(){
         $this->setViewFile('error_save_opinion');
         $this->view->setViewData('error', 'Beim Speichern deiner Meinung ist ein Fehler aufgetreten');

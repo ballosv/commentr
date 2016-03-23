@@ -114,6 +114,7 @@ class Url {
         $pgn = filter_input(INPUT_GET, 'pgn', FILTER_SANITIZE_STRING);
         $ldc = filter_input(INPUT_GET, 'ldc', FILTER_SANITIZE_STRING);
         $com = filter_input(INPUT_GET, 'com', FILTER_SANITIZE_STRING);
+        $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_STRING);
         // Prüfen ob ob URL-Parameter übergeben wurde
         if ($url) {
             // Letztes Slash aus der URL entfernen
@@ -153,6 +154,10 @@ class Url {
             
             if(!empty($com)){
                 $subParams['com'] = $com;
+            }
+            
+            if(!empty($id)){
+                $subParams['id'] = $id;
             }
             
             self::setSubParams($subParams);

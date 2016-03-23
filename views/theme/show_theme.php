@@ -1,6 +1,6 @@
 <?php 
 $theme = $this->getViewData('theme');
-$subtheme = $this->getViewData('subtheme');
+$topic = $this->getViewData('topic');
 $opinions = $this->getViewData('opinions');
 $likes = $this->getViewData('likes');
 
@@ -13,7 +13,7 @@ $comments = $this->getViewData('comments');
 ?>
 
 <div id="content">
-    <h1><?= $subtheme['name']; ?></h1>
+    <h1><?= $topic['name']; ?></h1>
     <h2>Thema: <?= $theme['name']; ?></h2>
     <a href="<?= BASE_URL . '/theme/show-themes/' . $theme['link'] . '?pgn=1'; ?>">zurück</a>
 
@@ -21,13 +21,13 @@ $comments = $this->getViewData('comments');
 
     <?php if($totalPages > 1): ?>
     <?php if($prevPage != $currentPage): ?>
-    <a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . $subtheme['link'] . '?pgn=' . $prevPage; ?>">zurück</a>
+    <a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . $topic['link'] . '?pgn=' . $prevPage; ?>">zurück</a>
     <?php endif; ?>
     <?php for ($i = 1 ; $i <= $totalPages ; $i++): ?>
-    <a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . $subtheme['link'] . '?pgn=' . $i; ?>"><?= $i; ?></a>
+    <a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . $topic['link'] . '?pgn=' . $i; ?>"><?= $i; ?></a>
     <?php endfor; ?>
     <?php if($nextPage > $currentPage): ?>
-    <a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . $subtheme['link'] . '?pgn=' . $nextPage; ?>">weiter</a>
+    <a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . $topic['link'] . '?pgn=' . $nextPage; ?>">weiter</a>
     <?php endif; ?>
     <?php endif; ?>
 </div>
