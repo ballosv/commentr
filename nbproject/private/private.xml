@@ -12,10 +12,11 @@
             <file>file:/Users/ballosv/_git_projects/commentr/libs/Model.php</file>
         </group>
         <group name="work_commentr">
-            <file>file:/Users/ballosv/_git_projects/commentr/controllers/User.php</file>
-            <file>file:/Users/ballosv/_git_projects/commentr/libs/Controller.php</file>
             <file>file:/Users/ballosv/_git_projects/commentr/controllers/Theme.php</file>
             <file>file:/Users/ballosv/_git_projects/commentr/libs/Model.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/controllers/User.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/views/theme/show_themes.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/views/theme/partials/opinions.php</file>
         </group>
     </open-files>
 </project-private>
