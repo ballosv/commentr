@@ -10,6 +10,8 @@
     <body>
         <header id="page-header">
             <div class="inner-wrap">
+                <h1>Commentr</h1>
+                <p>let us know, what you think</p>
                 <nav id="page-nav">
                     <ul>
                         <li><a href="<?= BASE_URL; ?>">Startseite</a></li>

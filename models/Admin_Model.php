@@ -117,7 +117,7 @@ Debug::addMsg('Thema wird aktiviert');
     }
     
     public function getAllDeactivatedThemes(){
-Debug::addMsg('Alle deaktivierten Themes anzeigen ');
+        Debug::addMsg('Alle deaktivierten Themes anzeigen ');
         try {
             // Startet die Warteschleife
             $this->db->beginTransaction();
@@ -144,4 +144,51 @@ Debug::addMsg('Alle deaktivierten Themes anzeigen ');
         return $data;
     }
 
+    
+    public function createNewTopic(){
+        Debug::addMsg('Ein neuer Topic wird erstellt');
+        $topicTitle = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $topicTeaser = filter_input(INPUT_POST, 'teaser', FILTER_SANITIZE_STRING);
+        $topicParent = filter_input(INPUT_POST, 'parent-theme', FILTER_SANITIZE_STRING);
+        $topicImage = $_FILES['image']['name'];
+        
+        if($topicParent != 0){
+            // Neuen Topic in Datenbank schreiben
+            try {
+                // Startet die Warteschleife
+                $this->db->beginTransaction();
+                /*
+                 * START Queries
+                 */
+
+                // Thema speichern
+                $query = $this->db->prepare("INSERT INTO topics (link, name, theme_id, teaser, image, status) VALUES (:link, :name, :theme_id, :teaser, :image, :status)");
+                $save = $query->execute(array(
+                    ':link' => self::clearString($topicTitle),
+                    ':name' => $topicTitle,
+                    ':theme_id' => $topicParent,
+                    ':teaser' => $topicTeaser,
+                    ':image' => $topicImage,
+                    ':status' => 1
+                ));
+
+                /*
+                 * END Queries
+                 */
+
+                // Durchführen der Warteschleife
+                $this->db->commit();
+            } catch (PDOException $ex) {
+                // Wenn es Fehler gab, Vorgänge rückgängig machen
+                $this->db->rollback();
+            }
+            return $save;
+        }
+        
+        return false;
+        
+        
+        
+        
+    }
 }

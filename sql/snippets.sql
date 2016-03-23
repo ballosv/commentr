@@ -20,3 +20,10 @@ COUNT(opinion_has_likes.opinion_id) AS like_count
 FROM opinions WHERE opinions.theme_id = 8
 JOIN opinion_has_likes ON opinions.id = opinion_has_likes.opinion_id
 GROUP BY opinion_has_likes.like_status
+
+SELECT
+theme.id
+COUNT(themes.id WHERE themes.parent = themes.id) AS subtheme_count
+FROM
+themes
+

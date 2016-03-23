@@ -3,6 +3,7 @@
 <nav>
     <ul>
         <li><a href="<?= BASE_URL . '/admin/new-theme'; ?>">Neues Thema hinzufügen</a></li>
+        <li><a href="<?= BASE_URL . '/admin/new-topic'; ?>">Neuen Topic erstellen</a></li>
         <li><a href="<?= BASE_URL . '/admin/show-trash'; ?>">Deaktivierte Themen anzeigen</a></li>
     </ul>
 </nav>

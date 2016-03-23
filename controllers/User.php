@@ -19,11 +19,14 @@ class User extends Controller {
         $this->renderView();
     }
     
-    public function newOpinion($param){
-        $this->view->setViewData('theme_link', $param[0]);
-        $this->view->setViewData('subtheme_link', $param[1]);
-        $subtheme = $this->model->getThemeByLink($param[1]);
-        $this->view->setViewData('subtheme_id', $subtheme['id']);
+    public function newOpinion($params){
+//        $this->view->setViewData('theme_link', $params[0]);
+//        $this->view->setViewData('topic_link', $params[1]);
+        $themeId = $this->model->getThemeByLink($params[0])['id'];
+//        $topic = $this->model->getTopicByLink($params[1], $themeId);
+        $topic = $this->model->getTopicById(Url::getSubParams()['id']);
+        $this->view->setViewData('topic_id', $topic['id']);
+
         $this->setViewFile('new_opinion');
     }
     
@@ -38,7 +41,7 @@ class User extends Controller {
     }
     
     public function newComment($params){
-        $this->view->setViewData('subtheme_link', $params[0]);
+        $this->view->setViewData('topic_link', $params[0]);
         $this->view->setViewData('opinion_id', $params[1]);
         $this->setViewFile('new_comment');
     }

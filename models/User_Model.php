@@ -12,7 +12,7 @@ class User_Model extends Model {
         Debug::addMsg('Neue Meinung wird gespeichert');
         $title = filter_input(INPUT_POST, 'opinion-title', FILTER_SANITIZE_STRING);
         $text = filter_input(INPUT_POST, 'opinion-text', FILTER_SANITIZE_STRING);
-        $themeId = filter_input(INPUT_POST, 'subtheme_id', FILTER_SANITIZE_STRING);
+        $themeId = filter_input(INPUT_POST, 'topic_id', FILTER_SANITIZE_STRING);
         $userId = Session::get('user_id');
         
         try {
@@ -23,9 +23,9 @@ class User_Model extends Model {
              */
             
             // Meinung speichern
-            $query = $this->db->prepare("INSERT INTO opinions (theme_id, user_id, title, text, status) VALUES (:theme_id, :user_id, :title, :text, :status)");
+            $query = $this->db->prepare("INSERT INTO opinions (topic_id, user_id, title, text, status) VALUES (:topic_id, :user_id, :title, :text, :status)");
             $save = $query->execute(array(
-                ':theme_id' => $themeId,
+                ':topic_id' => $themeId,
                 ':user_id' => $userId,
                 ':title' => $title,
                 ':text' => $text,

@@ -1,8 +1,8 @@
 <?php 
 // Theme laden
 $theme = $this->getViewData('theme'); 
-// Subthemes laden
-$subthemes = $this->getViewData('subthemes');
+// Topics laden
+$topics = $this->getViewData('topics');
 $currentPage = $this->getViewData('current_page');
 $totalPages = $this->getViewData('total_pages');
 $prevPage = ($currentPage - 1) > 0 ? $currentPage - 1 : $currentPage;
@@ -26,17 +26,17 @@ $likes = $this->getViewData('likes');
         <li><a href="<?= BASE_URL . '/theme/show-themes/' . $theme['link'] . '?pgn=1&ldc=20'; ?>">20</a></li>
     </ul>
 </div>
-<ul id="subthemes">
-    <?php foreach ($subthemes as $subtheme): ?>
-    <li class="subtheme">
-        <h2><?= $subtheme['name']; ?></h2>
-        <p><?= $subtheme['date']; ?></p>
-        <a href="<?= BASE_URL . '/user/new-opinion/' . $theme['link'] . '/' . $subtheme['link']; ?>">Deine Meinung</a>
+<ul id="topics">
+    <?php foreach ($topics as $topic): ?>
+    <li class="topic">
+        <h2><?= $topic['name']; ?></h2>
+        <p><?= $topic['date']; ?></p>
+        <a href="<?= BASE_URL . '/user/new-opinion/' . $theme['link'] . '/' . $topic['link'] . '?id=' . $topic['id']; ?>">Deine Meinung</a>
         
-        <?php $opinions = $allOpinions[$subtheme['id']]; ?>
+        <?php $opinions = $allOpinions[$topic['id']]; ?>
         <?php if(!empty($opinions)): ?>
         <?php include 'partials/opinions.php'; ?>
-        <a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . $subtheme['link'] . '?pgn=1'; ?>">open</a>
+        <a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . $topic['link'] . '?id=' . $topic['id'] . '&pgn=1'; ?>">open</a>
         <?php endif; ?>
         
         <ul></ul>
