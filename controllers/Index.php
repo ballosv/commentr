@@ -26,16 +26,16 @@ Debug::addMsg('index Controller');
          * Es werden Punkte vergeben für:
          * Topics: 15
          * Meinungen: 10
+         * Likes: 5
          * Kommentare: 1
          * 
          * Die Aktivitäten verlieren je länger sie her sind ihren Wert bis sie keine Punkte mehr bringen
          * 
          * Das Thema mit den meisten Punkten ist das Herotheme
          */
-//        $heroTheme = $this->model->getHeroTheme();
-//        var_dump($heroTheme);
-        
-        
+        $themeId = $this->model->getThemeIdsByRelevance();
+        $heroTheme = $this->model->getThemeById($themeId['theme_id']);
+        $this->view->setViewData('hero_theme', $heroTheme);
         
         
         
