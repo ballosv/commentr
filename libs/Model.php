@@ -110,7 +110,41 @@ class Model {
         return false;
     }
     
-    
+    public function getThemeIdsByRelevance($count = 1){
+        $query = $this->db->prepare("
+            SELECT
+            themes.id AS theme_id,
+            ((COUNT(topics.theme_id) * 15) + topics.date/100000000000) AS topic_count,
+            ((COUNT(opinions.topic_id) * 10) + opinions.date/100000000000) AS opinion_count,
+            ((COUNT(comments.opinion_id) * 1) + IFNULL(comments.date, 0)/100000000000) AS comments_count,
+            (
+                ((COUNT(topics.theme_id) * 15) + topics.date/100000000000) +
+                ((COUNT(opinions.topic_id) * 10) + opinions.date/100000000000) +
+                    ((COUNT(comments.opinion_id) * 1) + IFNULL(comments.date, 0)/100000000000)
+            ) AS theme_level
+            FROM topics
+            LEFT JOIN themes ON themes.id = topics.theme_id
+            LEFT JOIN opinions ON topics.id = opinions.topic_id
+            LEFT JOIN comments ON opinions.id = comments.opinion_id
+            GROUP BY themes.id
+            LIMIT $count
+                ");
+        $query->execute();
+        
+        $data = $query->fetchAll(FETCH_MODE);
+        $count = $query->rowCount();
+        
+        if($data){
+            if($count > 1){
+                return $data;
+            }else{
+                return $data[0];
+            }
+        }
+        
+        return false;
+        
+    }
     
     
     /*

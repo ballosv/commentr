@@ -27,3 +27,67 @@ COUNT(themes.id WHERE themes.parent = themes.id) AS subtheme_count
 FROM
 themes
 
+
+-- Alle Meinungen eines Topics
+SELECT themes.id, COUNT(topics.theme_id) AS topics_count
+FROM themes
+LEFT JOIN topics ON themes.id = topics.theme_id
+WHERE themes.id = 1
+GROUP BY topics.theme_id
+
+-- Alle Topics, Meinungen und Kommentare eines Themas auflisten
+SELECT themes.id AS theme_id, topics.id AS topic_id, COUNT(opinions.topic_id) AS opinion_count, COUNT(comments.opinion_id) AS comments_count
+FROM topics
+LEFT JOIN themes ON themes.id = topics.theme_id
+LEFT JOIN opinions ON topics.id = opinions.topic_id
+LEFT JOIN comments ON opinions.id = comments.opinion_id
+WHERE themes.id = 1
+GROUP BY opinions.topic_id
+
+-- Alle Topics, Meinungen und Kommentare eines Themas in einer Zeile anzeigen
+SELECT themes.id AS theme_id, COUNT(topics.theme_id) AS topic_count, COUNT(opinions.topic_id) AS opinion_count, COUNT(comments.opinion_id) AS comments_count
+FROM topics
+LEFT JOIN themes ON themes.id = topics.theme_id
+LEFT JOIN opinions ON topics.id = opinions.topic_id
+LEFT JOIN comments ON opinions.id = comments.opinion_id
+WHERE themes.id = 1
+GROUP BY themes.id
+
+-- Theme-Level berechnen
+SELECT themes.id AS theme_id, ((COUNT(topics.theme_id) * 15) + (COUNT(opinions.topic_id) * 10) + (COUNT(comments.opinion_id) * 1)) AS theme_level
+FROM topics
+LEFT JOIN themes ON themes.id = topics.theme_id
+LEFT JOIN opinions ON topics.id = opinions.topic_id
+LEFT JOIN comments ON opinions.id = comments.opinion_id
+WHERE themes.id = 1 
+GROUP BY themes.id
+
+-- Theme-Level mit zeitlicher Eingrenzung berechnen
+SELECT themes.id AS theme_id, ((COUNT(topics.theme_id) * 15) + (COUNT(opinions.topic_id) * 10) + (COUNT(comments.opinion_id) * 1)) AS theme_level
+FROM topics
+LEFT JOIN themes ON themes.id = topics.theme_id
+LEFT JOIN opinions ON topics.id = opinions.topic_id
+LEFT JOIN comments ON opinions.id = comments.opinion_id
+WHERE 
+topics.date BETWEEN FROM_UNIXTIME(1318763200 ) AND FROM_UNIXTIME(1478810979) AND
+opinions.date BETWEEN FROM_UNIXTIME(1318763200 ) AND FROM_UNIXTIME(1478810979) AND
+comments.date BETWEEN FROM_UNIXTIME(1318763200 ) AND FROM_UNIXTIME(1478810979)
+GROUP BY themes.id
+
+
+-- Theme-Level mit zeitlicher Eingrenzung berechnen
+SELECT 
+themes.id AS theme_id,
+((COUNT(topics.theme_id) * 15) + topics.date/100000000000) AS topic_count,
+((COUNT(opinions.topic_id) * 10) + opinions.date/100000000000) AS opinion_count,
+((COUNT(comments.opinion_id) * 1) + IFNULL(comments.date, 0)/100000000000) AS comments_count,
+(
+    ((COUNT(topics.theme_id) * 15) + topics.date/100000000000) +
+    ((COUNT(opinions.topic_id) * 10) + opinions.date/100000000000) +
+	((COUNT(comments.opinion_id) * 1) + IFNULL(comments.date, 0)/100000000000)
+) AS theme_level
+FROM topics
+LEFT JOIN themes ON themes.id = topics.theme_id
+LEFT JOIN opinions ON topics.id = opinions.topic_id
+LEFT JOIN comments ON opinions.id = comments.opinion_id
+GROUP BY themes.id

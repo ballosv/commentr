@@ -39,12 +39,15 @@ main{
     border: 1px solid black;
 }
 
-#theme-list ul{
+.theme-list ul{
     overflow: hidden;
 }
 
-.theme{
+.theme-list ul li{
     float: left;
+}
+
+.theme{
     border: 1px solid black;
     padding: 5px;
     width: 200px;
