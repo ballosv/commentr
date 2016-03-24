@@ -21,7 +21,18 @@ define('PUBLIC_URL', BASE_URL . DIRECTORY_SEPARATOR . 'public');
 // Datenbank
 // https://dbadmin.hosteurope.de/phpmyadmin/login.php?phpMyAdmin=qfkcqe22ek5q9atomadi6ls3sdvjp38s
 define('DB_TYPE', 'mysql');
-define('DB_HOST', 'WP354.WEBPACK.HOSTEUROPE.DE');
+define('DB_HOST', 'localhost');
+//define('DB_HOST', 'WP354.WEBPACK.HOSTEUROPE.DE');
 define('DB_NAME', 'db10715138-commentr');
 define('DB_USER', 'db10715138-comtr');
 define('DB_PASS', 'T3mpP455w0rt');
+
+define('FETCH_MODE', PDO::FETCH_ASSOC);
+
+// Frontend Config
+// Wie viel soll am Anfang geladen werden?
+define('INITIAL_LOAD_COUNT', 5);
+// Wie viel soll standardmäßig nachgeladen werden?
+define('DEFAULT_LOAD_COUNT', 10);
+// Standardzeitraum: 3 Tage
+define('DEFAULT_PERIOD', 259200);

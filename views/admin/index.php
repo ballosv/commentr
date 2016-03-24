@@ -3,6 +3,7 @@
 <nav>
     <ul>
         <li><a href="<?= BASE_URL . '/admin/new-theme'; ?>">Neues Thema hinzufügen</a></li>
+        <li><a href="<?= BASE_URL . '/admin/new-topic'; ?>">Neuen Topic erstellen</a></li>
         <li><a href="<?= BASE_URL . '/admin/show-trash'; ?>">Deaktivierte Themen anzeigen</a></li>
     </ul>
 </nav>
@@ -12,7 +13,7 @@
         <li class="theme">
             <h2><?= $theme['name']; ?></h2>
             <p><?= $theme['teaser']; ?></p>
-            <a href="<?= BASE_URL . '/admin/deactivate-theme/' . $theme['id']; ?>">Deaktivieren</a>
+            <a href="<?= BASE_URL . '/admin/deactivate-theme/' . $theme['link']; ?>">Deaktivieren</a>
         </li>
         <?php endforeach; ?>
     </ul>

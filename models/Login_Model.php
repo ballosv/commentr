@@ -10,7 +10,7 @@ class Login_Model extends Model{
     
     public function checkLogin($username, $password){
         // User aus der Datenbank auslesen
-        $query = $this->db->prepare("SELECT id, name, pass, role FROM users WHERE name = :username");
+        $query = $this->db->prepare("SELECT id, name, pass, hash, role FROM users WHERE name = :username");
         $query->execute(array(
             ':username' => $username
         ));
@@ -21,7 +21,7 @@ class Login_Model extends Model{
         
         if($rowCount > 0){
             // Passwort prüfen
-            if(password_verify($password, $data['pass']) === TRUE){
+            if( hash('SHA512',$password . $data['hash']) === $data['pass'] ){
                 Session::init();
                 Session::set('login_status', true);
                 Session::set('name', $data['name']);
@@ -36,10 +36,8 @@ class Login_Model extends Model{
                 if($data['role'] == 0){
                     Session::set('user_role', 0);
                 }
-                
                 return true;
-            }
-            else{
+            } else{
                 return false;
             }
         }else{

@@ -5,43 +5,61 @@ class Bootstrap {
     protected $controller;
     protected $method;
     protected $params;
-            
+           
     function __construct() {
         // Eine Session starten, damit sie überall verfügbar ist
         Session::init();
-        
         Url::parseUrl();
+        $this->controller = Url::getController();
+        $this->method = Url::getMethod('lcc');
+        $this->params = Url::getParams();
         
-        if(empty(Url::getController())){
-            Url::setController('index');
+        Debug::addMsg('REDIRECT_URL: ' . $_SERVER['REDIRECT_URL']);
+        Debug::addMsg('QUERY_STRING: ' . $_SERVER['QUERY_STRING']);
+        Debug::addMsg('REQUEST_URI: ' . $_SERVER['REQUEST_URI']);
+        
+        // Wenn kein Controller übergeben wurde auf Standard-Controller schalten
+        if(empty($this->controller)){
+            $this->controller = 'index';
+            $this->method = 'loadThemes';
         }
-
+        
         Debug::addMsg('Controller: ' . Url::getController());
         Debug::addMsg('Methode: ' . Url::getMethod());
-
+        Debug::addMsg('Parameter-1: ' . Url::getParams()[0]);
+        Debug::addMsg('Parameter-2: ' . Url::getParams()[1]);
+        
         // Prüfen ob es den Controller gibt
-        if (!file_exists(CONTROLLER_PATH . DIRECTORY_SEPARATOR . Url::getController('uc') . '.php')) {
-            Url::setController('error');
-            Url::setMethod('error404');
+        if (!file_exists(CONTROLLER_PATH . DIRECTORY_SEPARATOR . ucfirst($this->controller) . '.php')) {
+            $this->controller = 'error';
+            $this->method = 'error404';
         }
         
-        $controllerName = Url::getController('uc');
+        $controllerName = ucfirst($this->controller);
         require_once CONTROLLER_PATH . DIRECTORY_SEPARATOR . $controllerName . '.php';
         $controller = new $controllerName;
-        $controller->loadModel(Url::getController());
-        $controller->setTemplateView(Url::getController());
+        $loadModel = $controller->loadModel($controllerName);
+        $controller->setTemplateView($this->controller);  
         
-        if (Url::getMethod() && !empty(Url::getMethod())) {
+        if ($this->method && !empty($this->method)) {
             // Prüfen ob der Controller eine entsprechende Methode besitzt
-            if (method_exists($controller, Url::getMethod('lcc'))) {
-                if (!empty(Url::getParams())) {
+            if (method_exists($controller, $this->method)) {
+                if (!empty($this->params)) {
                     // Methode des Controllers durch variable bzw. dynamische Variable mit Parameter ausführen
-                    $controller->{Url::getMethod('lcc')}(Url::getParams());
+                    $controller->{$this->method}($this->params);
                 }else{
                     // Methode des Controllers durch variable bzw. dynamische Variable ohne Parameter ausführen 
-                    $controller->{Url::getMethod('lcc')}();
+                    $controller->{$this->method}();
                 }
+            }else{
+                header('Location: ' . BASE_URL . DIRECTORY_SEPARATOR . 'error/error-404');
             }
+        }
+        
+        $controller->index();
+        
+        if(Url::getController() !== 'login'){
+            Url::setLastPage();
         }
         
         // Parameter auslesen
@@ -116,7 +134,7 @@ class Bootstrap {
 //        }
 //        echo Url::parseUrl();
         // Nachdem die Controller-Methode ausgeführt wurde, die index-Methode für die Anzeige ausführen
-        $controller->index();        
+//        $controller->index();
     }
 
 //    protected function parseUrl(){
@@ -139,6 +157,7 @@ class Bootstrap {
 //
 //            return $url;
 //        }
+//          return FALSE;
 //    }
-    
+
 }

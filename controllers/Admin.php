@@ -14,6 +14,7 @@ class Admin extends Controller {
     }
     
     public function index(){
+        // In allen Views die Themen zur Verfügung stellen
         $this->view->setViewData('themes', $this->model->getAllThemes());
         
         $this->renderView();
@@ -25,14 +26,32 @@ class Admin extends Controller {
         $this->setViewFile('new_theme');
     }
     
+    public function newTopic(){
+        Debug::addMsg('Eingabemaske für neuen Topic anzeigen');
+//        $this->view->setViewData('categories', $this->model->getAllCategories());
+        $this->setViewFile('new_topic');
+    }
+    
     public function createNewTheme(){
         $saveTheme = $this->model->createNewTheme();
         if($saveTheme === true){
-            header('Location: ' . BASE_URL . '/admin/new-theme');
+            header('Location: ' . BASE_URL . '/admin');
         }
         else{
             header('Location: ' . BASE_URL . '/error/error-save-theme');
         }
+    }
+    
+    public function createNewTopic(){
+        Debug::addMsg('Neuer Topic soll gespeichert werden');
+        $saveTopic = $this->model->createNewTopic();
+//        if($saveTopic === true){
+//            header('Location: ' . BASE_URL . '/admin');
+//        }
+//        else{
+//            header('Location: ' . BASE_URL . '/error/error-save-Topic');
+//        }
+        
     }
     
     public function deactivateTheme($params){
@@ -47,6 +66,7 @@ class Admin extends Controller {
     }
     
     public function showTrash(){
+        Debug::addMsg('Deaktivierte Themen sollen angezeigt werden');
         $this->view->setViewData('trash-themes', $this->model->getAllDeactivatedThemes());
         $this->setViewFile('trash');
     }

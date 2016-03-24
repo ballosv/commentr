@@ -23,8 +23,9 @@ class Admin_Model extends Model {
              */
             
             // Thema speichern
-            $query = $this->db->prepare("INSERT INTO themes (name, teaser, parent, status) VALUES (:name, :teaser, :parent, :status)");
+            $query = $this->db->prepare("INSERT INTO themes (link, name, teaser, parent, status, date) VALUES (:link, :name, :teaser, :parent, :status)");
             $save = $query->execute(array(
+                ':link' => self::clearString($themeTitle),
                 ':name' => $themeTitle,
                 ':teaser' => $themeTeaser,
                 ':parent' => $themeParent,
@@ -55,7 +56,7 @@ class Admin_Model extends Model {
         return $save;
     }
     
-    public function deactivateTheme($themeId){
+    public function deactivateTheme($themeLink){
         Debug::addMsg('Thema wird deaktiviert');
         // Neues Thema in Datenbank schreiben und Kategorie abspeichern
         try {
@@ -66,9 +67,9 @@ class Admin_Model extends Model {
              */
             
             // Thema löschen
-            $query = $this->db->prepare("UPDATE themes SET status = 0 WHERE id = :theme_id");
+            $query = $this->db->prepare("UPDATE themes SET status = 0 WHERE link = :link");
             $deactivate = $query->execute(array(
-                ':theme_id' => $themeId
+                ':link' => $themeLink
             ));
             
             /*
@@ -85,8 +86,8 @@ class Admin_Model extends Model {
         return $deactivate;
     }
     
-    public function activateTheme($themeId){
-        Debug::addMsg('Thema wird aktiviert');
+    public function activateTheme($themeLink){
+Debug::addMsg('Thema wird aktiviert');
         // Neues Thema in Datenbank schreiben und Kategorie abspeichern
         try {
             // Startet die Warteschleife
@@ -96,9 +97,9 @@ class Admin_Model extends Model {
              */
             
             // Thema löschen
-            $query = $this->db->prepare("UPDATE themes SET status = 1 WHERE id = :theme_id");
+            $query = $this->db->prepare("UPDATE themes SET status = 1 WHERE link = :link");
             $activate = $query->execute(array(
-                ':theme_id' => $themeId
+                ':link' => $themeLink
             ));
             
             /*
@@ -127,7 +128,7 @@ class Admin_Model extends Model {
             // Thema löschen
             $query = $this->db->prepare("SELECT * FROM themes WHERE status = 0");
             $query->execute();
-            $data = $query->fetchAll();
+            $data = $query->fetchAll(FETCH_MODE);
             
             /*
              * END Queries
@@ -143,4 +144,51 @@ class Admin_Model extends Model {
         return $data;
     }
 
+    
+    public function createNewTopic(){
+        Debug::addMsg('Ein neuer Topic wird erstellt');
+        $topicTitle = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $topicTeaser = filter_input(INPUT_POST, 'teaser', FILTER_SANITIZE_STRING);
+        $topicParent = filter_input(INPUT_POST, 'parent-theme', FILTER_SANITIZE_STRING);
+        $topicImage = $_FILES['image']['name'];
+        
+        if($topicParent != 0){
+            // Neuen Topic in Datenbank schreiben
+            try {
+                // Startet die Warteschleife
+                $this->db->beginTransaction();
+                /*
+                 * START Queries
+                 */
+
+                // Thema speichern
+                $query = $this->db->prepare("INSERT INTO topics (link, name, theme_id, teaser, image, status) VALUES (:link, :name, :theme_id, :teaser, :image, :status)");
+                $save = $query->execute(array(
+                    ':link' => self::clearString($topicTitle),
+                    ':name' => $topicTitle,
+                    ':theme_id' => $topicParent,
+                    ':teaser' => $topicTeaser,
+                    ':image' => $topicImage,
+                    ':status' => 1
+                ));
+
+                /*
+                 * END Queries
+                 */
+
+                // Durchführen der Warteschleife
+                $this->db->commit();
+            } catch (PDOException $ex) {
+                // Wenn es Fehler gab, Vorgänge rückgängig machen
+                $this->db->rollback();
+            }
+            return $save;
+        }
+        
+        return false;
+        
+        
+        
+        
+    }
 }

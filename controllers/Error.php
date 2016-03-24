@@ -4,17 +4,17 @@ class Error extends Controller{
             
     function __construct() {
         parent::__construct();
-        Debug::addMsg('Fehler Controller');
+Debug::addMsg('Fehler Controller');
     }
     
     public function index(){
-        Debug::addMsg('index geladen');
+Debug::addMsg('index geladen');
         
         $this->renderView();
     }
     
     public function error404(){
-        Debug::addMsg('Fehlerseite 404 geladen');
+Debug::addMsg('Fehlerseite 404 geladen');
         $this->setViewFile('error404');
         $this->view->setViewData('Die angeforderte Seite konnte nicht gefunden werden.');
     }
@@ -29,9 +29,19 @@ class Error extends Controller{
         $this->view->setViewData('Beim Speichern des Themas ist ein Fehler aufgetreten');
     }
     
+    public function errorSaveTopic(){
+        $this->setViewFile('error_save_topic');
+        $this->view->setViewData('Beim Speichern des Topics ist ein Fehler aufgetreten');
+    }
+    
     public function errorSaveOpinion(){
         $this->setViewFile('error_save_opinion');
         $this->view->setViewData('error', 'Beim Speichern deiner Meinung ist ein Fehler aufgetreten');
     }
 
+    public function errorSaveComment(){
+        $this->setViewFile('error_save_comment');
+        $this->view->setViewData('error', 'Beim Speichern deines Kommentars ist ein Fehler aufgetreten');
+    }
+    
 }
