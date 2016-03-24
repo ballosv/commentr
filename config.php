@@ -11,9 +11,7 @@ define('MODEL_PATH', APP_PATH . DIRECTORY_SEPARATOR . 'models');
 
 // URL-Pfade
 // Standard Sven
-//define('BASE_URL', 'http://localhost:8888');
-// Standard Freddy
-define('BASE_URL', 'http://localhost:81');
+define('BASE_URL', 'http://localhost:8888');
 
 define('PUBLIC_URL', BASE_URL . DIRECTORY_SEPARATOR . 'public');
 //define('MODEL_PATH', APP_PATH . DIRECTORY_SEPARATOR . 'public');
