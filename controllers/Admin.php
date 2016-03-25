@@ -45,12 +45,12 @@ class Admin extends Controller {
     public function createNewTopic(){
         Debug::addMsg('Neuer Topic soll gespeichert werden');
         $saveTopic = $this->model->createNewTopic();
-//        if($saveTopic === true){
-//            header('Location: ' . BASE_URL . '/admin');
-//        }
-//        else{
-//            header('Location: ' . BASE_URL . '/error/error-save-Topic');
-//        }
+        if($saveTopic === true){
+            header('Location: ' . BASE_URL . '/admin');
+        }
+        else{
+            header('Location: ' . BASE_URL . '/error/error-save-Topic');
+        }
         
     }
     

@@ -11,8 +11,9 @@ class Admin_Model extends Model {
         Debug::addMsg('Neues Thema wird erstellt');
         $themeTitle = filter_input(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $themeTeaser = filter_input(INPUT_POST, 'teaser', FILTER_SANITIZE_STRING);
-        $themeParent = filter_input(INPUT_POST, 'parent-theme', FILTER_SANITIZE_STRING);
+        $themeRelation = filter_input(INPUT_POST, 'related_theme', FILTER_SANITIZE_STRING);
         $themeCategory = filter_input(INPUT_POST, 'category', FILTER_SANITIZE_STRING);
+        $themeImage = $_FILES['image']['name'];
         
         // Neues Thema in Datenbank schreiben und Kategorie abspeichern
         try {
@@ -23,15 +24,16 @@ class Admin_Model extends Model {
              */
             
             // Thema speichern
-            $query = $this->db->prepare("INSERT INTO themes (link, name, teaser, parent, status, date) VALUES (:link, :name, :teaser, :parent, :status)");
+            $query = $this->db->prepare("INSERT INTO themes (link, name, teaser, image, status) VALUES (:link, :name, :teaser, :image, :status)");
             $save = $query->execute(array(
                 ':link' => self::clearString($themeTitle),
                 ':name' => $themeTitle,
                 ':teaser' => $themeTeaser,
-                ':parent' => $themeParent,
+                ':image' => $themeImage,
                 ':status' => 1
             ));
             
+              
             // Die zuletzt gespeicherte ID
             $lastId = $this->db->lastInsertId();
             

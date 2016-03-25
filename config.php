@@ -33,3 +33,8 @@ define('INITIAL_LOAD_COUNT', 5);
 define('DEFAULT_LOAD_COUNT', 10);
 // Standardzeitraum: 3 Tage
 define('DEFAULT_PERIOD', 259200);
+// Zeitfaktor
+define('TIME_FACTOR', 100000000000);
+define('TOPIC_FACTOR', 5);
+define('OPINION_FACTOR', 8);
+define('COMMENT_FACTOR', 1);

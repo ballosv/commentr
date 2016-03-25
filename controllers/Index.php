@@ -33,12 +33,15 @@ Debug::addMsg('index Controller');
          * 
          * Das Thema mit den meisten Punkten ist das Herotheme
          */
-        $themeId = $this->model->getThemeIdsByRelevance();
-        $heroTheme = $this->model->getThemeById($themeId['theme_id']);
+//        $themeId = $this->model->getThemeIdsByRelevance();
+//        $heroTheme = $this->model->getThemeById($themeId['theme_id']);
+//        $this->view->setViewData('hero_theme', $heroTheme);
+        $topThemes = $this->model->getThemesByRelevance(5);
+        $heroTheme = $topThemes[0];
+        
+        $this->view->setViewData('top_themes', $topThemes);
         $this->view->setViewData('hero_theme', $heroTheme);
-        
-        
-        
+
         // Anzahl Themen auslesen
         $totalCount = $this->model->getTotalThemeCount()['total_count'];
         $this->view->setViewData('total_theme_count', $totalCount);
@@ -47,7 +50,6 @@ Debug::addMsg('index Controller');
         $maxCount = $totalCount >= $maxCount ? $maxCount : $totalCount;
         
         $this->view->setViewData('themes', $this->model->getThemesByCount($minCount, $maxCount));
-//        $this->view->setViewData('hero_themes', '');
     }
     
 

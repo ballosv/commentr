@@ -91,3 +91,101 @@ LEFT JOIN themes ON themes.id = topics.theme_id
 LEFT JOIN opinions ON topics.id = opinions.topic_id
 LEFT JOIN comments ON opinions.id = comments.opinion_id
 GROUP BY themes.id
+
+SELECT
+themes.id AS theme_id,
+themes.link,
+themes.name,
+themes.teaser,
+themes.date,
+themes.image,
+themes.status,
+COUNT(topics.theme_id) AS topic_count,
+COUNT(opinions.topic_id) AS opinion_count,
+IFNULL(COUNT(comments.opinion_id), 0) AS comments_count,
+(
+	((COUNT(topics.theme_id) * 5) + DAY(topics.date) + MONTH(topics.date) + YEAR(topics.date)) +
+	((COUNT(opinions.topic_id) * 8) + DAY(opinions.date) + MONTH(opinions.date) + YEAR(opinions.date))
+) AS theme_level
+FROM topics
+LEFT JOIN themes ON themes.id = topics.theme_id
+LEFT JOIN opinions ON topics.id = opinions.topic_id
+LEFT JOIN comments ON opinions.id = comments.opinion_id
+GROUP BY themes.id
+LIMIT 2
+
+SELECT
+themes.id AS theme_id,
+themes.link,
+themes.name,
+themes.teaser,
+themes.date,
+themes.image,
+themes.status,
+COUNT(topics.theme_id) AS topic_count,
+(
+	(COUNT(topics.theme_id) * 5) + (DAY(topics.date) + MONTH(topics.date) + YEAR(topics.date)) * COUNT(topics.theme_id)
+) AS theme_level
+FROM topics
+LEFT JOIN themes ON themes.id = topics.theme_id
+GROUP BY themes.id
+LIMIT 2
+
+SELECT
+themes.id AS theme_id,
+themes.link,
+themes.name,
+themes.teaser,
+themes.date,
+themes.image,
+themes.status,
+COUNT(topics.theme_id) AS topic_count,
+COUNT(opinions.topic_id) AS opinion_count,
+IFNULL(COUNT(comments.opinion_id), 0) AS comments_count,
+(
+	((COUNT(topics.theme_id) * 5) + (DAY(topics.date) + MONTH(topics.date) + YEAR(topics.date))*COUNT(topics.theme_id)) +
+	((COUNT(opinions.topic_id) * 8) + (DAY(opinions.date) + MONTH(opinions.date) + YEAR(opinions.date))*COUNT(opinions.topic_id))
+) AS theme_level
+FROM topics
+LEFT JOIN themes ON themes.id = topics.theme_id
+LEFT JOIN opinions ON topics.id = opinions.topic_id
+LEFT JOIN comments ON opinions.id = comments.opinion_id
+GROUP BY themes.id
+LIMIT 2
+
+SELECT
+themes.id AS theme_id,
+themes.link,
+themes.name,
+themes.teaser,
+themes.date,
+themes.image,
+themes.status,
+COUNT(topics.theme_id) AS topic_count,
+COUNT(opinions.topic_id) AS opinion_count,
+IFNULL(COUNT(comments.opinion_id), 0) AS comments_count,
+((COUNT(topics.theme_id) * 5) + (DAY(topics.date) + MONTH(topics.date) + YEAR(topics.date))*COUNT(topics.theme_id)) AS topic_level,
+((COUNT(opinions.topic_id) * 8) + (DAY(opinions.date) + MONTH(opinions.date) + YEAR(opinions.date))*COUNT(opinions.topic_id)) AS opinion_level,
+((COUNT(comments.opinion_id) * 1) + IFNULL((DAY(comments.date) + MONTH(comments.date) + YEAR(comments.date)) * COUNT(comments.opinion_id), 0)) AS comments_level,
+(
+    ((COUNT(topics.theme_id) * 5) + (DAY(topics.date) + MONTH(topics.date) + YEAR(topics.date))*COUNT(topics.theme_id)) +
+    ((COUNT(opinions.topic_id) * 8) + (DAY(opinions.date) + MONTH(opinions.date) + YEAR(opinions.date))*COUNT(opinions.topic_id)) +
+    (
+        (COUNT(comments.opinion_id) * 1) + 
+        IFNULL(
+            (
+                DAY(comments.date) + 
+                MONTH(comments.date) + 
+                YEAR(comments.date)
+            ) * 
+            COUNT(comments.opinion_id), 
+            0
+        )
+    )
+) AS theme_level
+FROM topics
+LEFT JOIN themes ON themes.id = topics.theme_id
+LEFT JOIN opinions ON topics.id = opinions.topic_id
+LEFT JOIN comments ON opinions.id = comments.opinion_id
+GROUP BY themes.id
+LIMIT 2

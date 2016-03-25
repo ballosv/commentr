@@ -110,6 +110,66 @@ class Model {
         return false;
     }
     
+    public function getThemesByRelevance($count = 1){
+        $query = $this->db->prepare("
+            SELECT
+            themes.id AS theme_id,
+            themes.link,
+            themes.name,
+            themes.teaser,
+            themes.date,
+            themes.image,
+            themes.status,
+            COUNT(topics.theme_id) AS topic_count,
+            COUNT(opinions.topic_id) AS opinion_count,
+            IFNULL(COUNT(comments.opinion_id), 0) AS comments_count,
+            ((COUNT(topics.theme_id) * :topic_fac) + (DAY(topics.date) + MONTH(topics.date) + YEAR(topics.date))*COUNT(topics.theme_id)) AS topic_level,
+            ((COUNT(opinions.topic_id) * :opinion_fac) + (DAY(opinions.date) + MONTH(opinions.date) + YEAR(opinions.date))*COUNT(opinions.topic_id)) AS opinion_level,
+            ((COUNT(comments.opinion_id) * :comment_fac) + IFNULL((DAY(comments.date) + MONTH(comments.date) + YEAR(comments.date)) * COUNT(comments.opinion_id), 0)) AS comments_level,
+            (
+                ((COUNT(topics.theme_id) * :topic_fac) + (DAY(topics.date) + MONTH(topics.date) + YEAR(topics.date))*COUNT(topics.theme_id)) +
+                ((COUNT(opinions.topic_id) * :opinion_fac) + (DAY(opinions.date) + MONTH(opinions.date) + YEAR(opinions.date))*COUNT(opinions.topic_id)) +
+                (
+                    (COUNT(comments.opinion_id) * :comment_fac) + 
+                    IFNULL(
+                        (
+                            DAY(comments.date) + 
+                            MONTH(comments.date) + 
+                            YEAR(comments.date)
+                        ) * 
+                        COUNT(comments.opinion_id), 
+                        0
+                    )
+                )
+            ) AS theme_level
+            FROM topics
+            LEFT JOIN themes ON themes.id = topics.theme_id
+            LEFT JOIN opinions ON topics.id = opinions.topic_id
+            LEFT JOIN comments ON opinions.id = comments.opinion_id
+            GROUP BY themes.id
+            LIMIT $count
+                ");
+        $query->execute(array(
+            ':topic_fac' => TOPIC_FACTOR,
+            ':opinion_fac' => OPINION_FACTOR,
+            ':comment_fac' => COMMENT_FACTOR
+        ));
+        
+        $data = $query->fetchAll(FETCH_MODE);
+        $count = $query->rowCount();
+        
+        if($data){
+            if($count > 1){
+                return $data;
+            }else{
+                return $data[0];
+            }
+        }
+        
+        return false;
+        
+    }
+    
     public function getThemeIdsByRelevance($count = 1){
         $query = $this->db->prepare("
             SELECT
