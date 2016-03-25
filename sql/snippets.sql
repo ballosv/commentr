@@ -213,6 +213,8 @@ JOIN topics ON themes.id = topics.theme_id
 GROUP BY themes.id
 
 -- Levelcount-Berechnung durch Abzug einer faktorisierten Datumsdifferenz
+
+-- Version phpmyadmin
 SELECT
 themes.id,
 themes.id AS theme_id,
@@ -235,3 +237,31 @@ JOIN topics ON themes.id = topics.theme_id
 LEFT JOIN opinions ON topics.id = opinions.topic_id
 LEFT JOIN comments ON opinions.id = comments.opinion_id
 GROUP BY themes.id
+ORDER BY level_count DESC
+LIMIT 1
+
+-- Version live
+SELECT
+themes.id,
+themes.id AS theme_id,
+themes.link,
+themes.name,
+themes.teaser,
+themes.date,
+themes.image,
+themes.status,
+IFNULL(SUM(IF(:topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac) < 0, 0, :topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac))), 0) AS topic_level,
+IFNULL(SUM(IF(:opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac) < 0, 0, :opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac))), 0) AS opinion_level,
+IFNULL(SUM(IF(:comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac) < 0, 0, :comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac))), 0) AS comment_level,
+(
+        IFNULL(SUM(IF(:topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac) < 0, 0, :topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac))), 0) +
+        IFNULL(SUM(IF(:opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac) < 0, 0, :opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac))), 0) +
+        IFNULL(SUM(IF(:comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac) < 0, 0, :comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac))), 0) 
+) AS level_count
+FROM themes
+JOIN topics ON themes.id = topics.theme_id
+LEFT JOIN opinions ON topics.id = opinions.topic_id
+LEFT JOIN comments ON opinions.id = comments.opinion_id
+GROUP BY themes.id
+ORDER BY level_count DESC
+LIMIT $count

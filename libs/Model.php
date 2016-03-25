@@ -34,7 +34,7 @@ class Model {
             $query = $this->db->prepare("SELECT * FROM themes WHERE parent = 0 AND status = 1");
             $query->execute();
         }else{
-            $query = $this->db->prepare("SELECT * FROM themes WHERE parent = 0 AND status = 1 ORDER BY date LIMIT $minCount, $maxCount");
+            $query = $this->db->prepare("SELECT * FROM themes WHERE parent = 0 AND status = 1 ORDER BY date DESC LIMIT $minCount, $maxCount");
             $query->execute(array(
                 ':min_count' => $minCount,
                 ':max_count' => $maxCount
@@ -121,13 +121,13 @@ class Model {
             themes.date,
             themes.image,
             themes.status,
-            IFNULL(SUM(IF(:topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/10) < 0, 0, :topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac))), 0) AS topic_level,
-            IFNULL(SUM(IF(:opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/10) < 0, 0, :opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac))), 0) AS opinion_level,
-            IFNULL(SUM(IF(:comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/10) < 0, 0, :comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac))), 0) AS comment_level,
+            IFNULL(SUM(IF(:topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac) < 0, 0, :topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac))), 0) AS topic_level,
+            IFNULL(SUM(IF(:opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac) < 0, 0, :opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac))), 0) AS opinion_level,
+            IFNULL(SUM(IF(:comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac) < 0, 0, :comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac))), 0) AS comment_level,
             (
-                    IFNULL(SUM(IF(:topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/10) < 0, 0, :topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac))), 0) +
-                    IFNULL(SUM(IF(:opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/10) < 0, 0, :opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac))), 0) +
-                    IFNULL(SUM(IF(:comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/10) < 0, 0, :comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac))), 0) 
+                    IFNULL(SUM(IF(:topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac) < 0, 0, :topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac))), 0) +
+                    IFNULL(SUM(IF(:opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac) < 0, 0, :opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac))), 0) +
+                    IFNULL(SUM(IF(:comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac) < 0, 0, :comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac))), 0) 
             ) AS level_count
             FROM themes
             JOIN topics ON themes.id = topics.theme_id

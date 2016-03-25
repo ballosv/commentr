@@ -33,6 +33,9 @@ $loadCount = (count($themes) + DEFAULT_LOAD_COUNT) > $totalCount ? $totalCount :
             <?php endforeach; ?>
         </ul>
     </div>
+    <?php if(count($themes) != $loadCount): ?>
+    <a href="<?= BASE_URL . '/index/load-themes/' . $loadCount; ?>">Show more</a>
+    <?php endif; ?>
 </div>
 <div id="last-themes">
     <h2>Zuletzt hinzugefügt</h2>
