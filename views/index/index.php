@@ -1,5 +1,6 @@
 <?php 
 $heroTheme = $this->getViewData('hero_theme');
+$topThemes = $this->getViewData('top_themes');
 $themes = $this->getViewData('themes');
 $totalCount = $this->getViewData('total_theme_count');
 $loadCount = (count($themes) + DEFAULT_LOAD_COUNT) > $totalCount ? $totalCount : (count($themes) + DEFAULT_LOAD_COUNT);
@@ -13,10 +14,25 @@ $loadCount = (count($themes) + DEFAULT_LOAD_COUNT) > $totalCount ? $totalCount :
         <a href="<?= BASE_URL . '/theme/show-themes/' . $heroTheme['link'] . '?pgn=1'; ?>">Anzeigen</a>
     </div>
 </div>
-    
 <div id="hot-themes">
     <h2>Aktuelle Themen</h2>
-    <p>Derzeit keine aktuellen Themen</p>
+    <div class="theme-list">
+        <ul>
+            <?php foreach ($topThemes as $topTheme): ?>
+            <li class="theme">
+                <h3><?= $topTheme['name']; ?></h3>
+                <p><?= $topTheme['teaser']; ?></p>
+                <?php if(DEBUG_MODE): ?>
+                <p><?= $topTheme['theme_level']; ?></p>
+                <p>Topics: <?= $topTheme['topic_count']; ?></p>
+                <p>Meinungen: <?= $topTheme['opinion_count']; ?></p>
+                <p>Kommentare: <?= $topTheme['comments_count']; ?></p>
+                <?php endif; ?>
+                <a href="<?= BASE_URL . '/theme/show-themes/' . $topTheme['link'] . '?pgn=1'; ?>">Anzeigen</a>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
 </div>
 <div id="last-themes">
     <h2>Zuletzt hinzugefügt</h2>

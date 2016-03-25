@@ -1,5 +1,5 @@
 <h1>Neues Thema erstellen</h1>
-<form method="post" action="<?= BASE_URL . '/admin/create-new-theme' ?>">
+<form method="post" action="<?= BASE_URL . '/admin/create-new-theme' ?>" enctype="multipart/form-data">
     <input type="text" name="name" />
     <br />
     <select name="category">
@@ -9,7 +9,7 @@
         <?php endforeach; ?>
     </select>
     <br />
-    <select name="parent-theme">
+    <select name="related_theme">
         <option value="0">Übergeordnetes Thema wählen</option>
         <?php foreach($this->getViewData('themes') as $theme): ?>
         <option value="<?= $theme['id']; ?>"><?= $theme['name']; ?></option>
@@ -17,6 +17,8 @@
     </select>
     <br />
     <textarea name="teaser"></textarea>
+    <br />
+    <input type="file" name="image" />
     <br />
     <input type="submit" value="Neues Thema erstellen" />
 </form>
