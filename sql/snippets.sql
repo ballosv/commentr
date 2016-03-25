@@ -189,3 +189,49 @@ LEFT JOIN opinions ON topics.id = opinions.topic_id
 LEFT JOIN comments ON opinions.id = comments.opinion_id
 GROUP BY themes.id
 LIMIT 2
+
+
+SELECT
+themes.name AS theme_name,
+topics.name AS topic_name,
+topics.date AS topic_date,
+SUM(DAY(topics.date)) + SUM(MONTH(topics.date)) + SUM(YEAR(topics.date)) AS topic_date_level,
+topics.id AS topic_id
+FROM themes
+JOIN topics ON themes.id = topics.theme_id
+GROUP BY themes.id
+
+
+SELECT
+themes.name AS theme_name,
+topics.name AS topic_name,
+topics.date AS topic_date,
+topics.id AS topic_id,
+SUM(IF(5 - DATEDIFF(CURRENT_DATE, DATE(topics.date)) < 0, 0, 10 - DATEDIFF(CURRENT_DATE, DATE(topics.date)))) AS topic_level
+FROM themes
+JOIN topics ON themes.id = topics.theme_id
+GROUP BY themes.id
+
+-- Levelcount-Berechnung durch Abzug einer faktorisierten Datumsdifferenz
+SELECT
+themes.id,
+themes.id AS theme_id,
+themes.link,
+themes.name,
+themes.teaser,
+themes.date,
+themes.image,
+themes.status,
+IFNULL(SUM(IF(5 - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/10) < 0, 0, 5 - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/10))), 0) AS topic_level,
+IFNULL(SUM(IF(8 - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/10) < 0, 0, 8 - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/10))), 0) AS opinion_level,
+IFNULL(SUM(IF(1 - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/10) < 0, 0, 1 - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/10))), 0) AS comment_level,
+(
+	IFNULL(SUM(IF(5 - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/10) < 0, 0, 5 - (DATEDIFF(CURRENT_DATE, 			DATE(topics.date))/10))), 0) +
+	IFNULL(SUM(IF(8 - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/10) < 0, 0, 8 - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/10))), 0) +
+	IFNULL(SUM(IF(1 - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/10) < 0, 0, 1 - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/10))), 0) 
+) AS level_count
+FROM themes
+JOIN topics ON themes.id = topics.theme_id
+LEFT JOIN opinions ON topics.id = opinions.topic_id
+LEFT JOIN comments ON opinions.id = comments.opinion_id
+GROUP BY themes.id

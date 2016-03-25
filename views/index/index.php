@@ -23,10 +23,10 @@ $loadCount = (count($themes) + DEFAULT_LOAD_COUNT) > $totalCount ? $totalCount :
                 <h3><?= $topTheme['name']; ?></h3>
                 <p><?= $topTheme['teaser']; ?></p>
                 <?php if(DEBUG_MODE): ?>
-                <p><?= $topTheme['theme_level']; ?></p>
-                <p>Topics: <?= $topTheme['topic_count']; ?></p>
-                <p>Meinungen: <?= $topTheme['opinion_count']; ?></p>
-                <p>Kommentare: <?= $topTheme['comments_count']; ?></p>
+                <p><?= $topTheme['level_count']; ?></p>
+                <p>Topics: <?= $topTheme['topic_level']; ?></p>
+                <p>Meinungen: <?= $topTheme['opinion_level']; ?></p>
+                <p>Kommentare: <?= $topTheme['comment_level']; ?></p>
                 <?php endif; ?>
                 <a href="<?= BASE_URL . '/theme/show-themes/' . $topTheme['link'] . '?pgn=1'; ?>">Anzeigen</a>
             </li>

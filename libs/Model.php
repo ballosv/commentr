@@ -113,6 +113,7 @@ class Model {
     public function getThemesByRelevance($count = 1){
         $query = $this->db->prepare("
             SELECT
+            themes.id,
             themes.id AS theme_id,
             themes.link,
             themes.name,
@@ -120,36 +121,24 @@ class Model {
             themes.date,
             themes.image,
             themes.status,
-            COUNT(topics.theme_id) AS topic_count,
-            COUNT(opinions.topic_id) AS opinion_count,
-            IFNULL(COUNT(comments.opinion_id), 0) AS comments_count,
-            ((COUNT(topics.theme_id) * :topic_fac) + (DAY(topics.date) + MONTH(topics.date) + YEAR(topics.date))*COUNT(topics.theme_id)) AS topic_level,
-            ((COUNT(opinions.topic_id) * :opinion_fac) + (DAY(opinions.date) + MONTH(opinions.date) + YEAR(opinions.date))*COUNT(opinions.topic_id)) AS opinion_level,
-            ((COUNT(comments.opinion_id) * :comment_fac) + IFNULL((DAY(comments.date) + MONTH(comments.date) + YEAR(comments.date)) * COUNT(comments.opinion_id), 0)) AS comments_level,
+            IFNULL(SUM(IF(:topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/10) < 0, 0, :topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac))), 0) AS topic_level,
+            IFNULL(SUM(IF(:opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/10) < 0, 0, :opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac))), 0) AS opinion_level,
+            IFNULL(SUM(IF(:comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/10) < 0, 0, :comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac))), 0) AS comment_level,
             (
-                ((COUNT(topics.theme_id) * :topic_fac) + (DAY(topics.date) + MONTH(topics.date) + YEAR(topics.date))*COUNT(topics.theme_id)) +
-                ((COUNT(opinions.topic_id) * :opinion_fac) + (DAY(opinions.date) + MONTH(opinions.date) + YEAR(opinions.date))*COUNT(opinions.topic_id)) +
-                (
-                    (COUNT(comments.opinion_id) * :comment_fac) + 
-                    IFNULL(
-                        (
-                            DAY(comments.date) + 
-                            MONTH(comments.date) + 
-                            YEAR(comments.date)
-                        ) * 
-                        COUNT(comments.opinion_id), 
-                        0
-                    )
-                )
-            ) AS theme_level
-            FROM topics
-            LEFT JOIN themes ON themes.id = topics.theme_id
+                    IFNULL(SUM(IF(:topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/10) < 0, 0, :topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac))), 0) +
+                    IFNULL(SUM(IF(:opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/10) < 0, 0, :opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac))), 0) +
+                    IFNULL(SUM(IF(:comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/10) < 0, 0, :comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac))), 0) 
+            ) AS level_count
+            FROM themes
+            JOIN topics ON themes.id = topics.theme_id
             LEFT JOIN opinions ON topics.id = opinions.topic_id
             LEFT JOIN comments ON opinions.id = comments.opinion_id
             GROUP BY themes.id
+            ORDER BY level_count DESC
             LIMIT $count
                 ");
         $query->execute(array(
+            ':time_fac' => TIME_FACTOR,
             ':topic_fac' => TOPIC_FACTOR,
             ':opinion_fac' => OPINION_FACTOR,
             ':comment_fac' => COMMENT_FACTOR
