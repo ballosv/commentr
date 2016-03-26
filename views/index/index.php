@@ -11,7 +11,7 @@ $loadCount = (count($themes) + DEFAULT_LOAD_COUNT) > $totalCount ? $totalCount :
     <div class="theme">
         <h3><?= $heroTheme['name']; ?></h3>
         <p><?= $heroTheme['teaser']; ?></p>
-        <a href="<?= BASE_URL . '/theme/show-themes/' . $heroTheme['link'] . '?pgn=1'; ?>">Anzeigen</a>
+        <a href="<?= BASE_URL . '/theme/show-theme/' . $heroTheme['link'] . '?pgn=1'; ?>">Anzeigen</a>
     </div>
 </div>
 <div id="hot-themes">
@@ -28,13 +28,13 @@ $loadCount = (count($themes) + DEFAULT_LOAD_COUNT) > $totalCount ? $totalCount :
                 <p>Meinungen: <?= $topTheme['opinion_level']; ?></p>
                 <p>Kommentare: <?= $topTheme['comment_level']; ?></p>
                 <?php endif; ?>
-                <a href="<?= BASE_URL . '/theme/show-themes/' . $topTheme['link'] . '?pgn=1'; ?>">Anzeigen</a>
+                <a href="<?= BASE_URL . '/theme/show-theme/' . $topTheme['link'] . '?pgn=1'; ?>">Anzeigen</a>
             </li>
             <?php endforeach; ?>
         </ul>
     </div>
     <?php if(count($themes) != $loadCount): ?>
-    <a href="<?= BASE_URL . '/index/load-themes/' . $loadCount; ?>">Show more</a>
+    <a href="<?= BASE_URL . '/theme/themes-list?pgn=1'; ?>">Show more</a>
     <?php endif; ?>
 </div>
 <div id="last-themes">
@@ -45,12 +45,12 @@ $loadCount = (count($themes) + DEFAULT_LOAD_COUNT) > $totalCount ? $totalCount :
             <li class="theme">
                 <h3><?= $theme['name']; ?></h3>
                 <p><?= $theme['teaser']; ?></p>
-                <a href="<?= BASE_URL . '/theme/show-themes/' . $theme['link'] . '?pgn=1'; ?>">Anzeigen</a>
+                <a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . '?pgn=1'; ?>">Anzeigen</a>
             </li>
             <?php endforeach; ?>
         </ul>
         <?php if(count($themes) != $loadCount): ?>
-        <a href="<?= BASE_URL . '/index/load-themes/' . $loadCount; ?>">Show more</a>
+        <a href="<?= BASE_URL . '/theme/themes-list?pgn=1'; ?>">Show more</a>
         <?php endif; ?>
     </div>
 </div>    

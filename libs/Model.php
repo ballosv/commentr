@@ -98,7 +98,7 @@ class Model {
     }
     
     public function getTotalThemeCount(){
-        $query = $this->db->prepare("SELECT COUNT(*) AS total_count FROM themes WHERE parent = 0 AND status = 1");
+        $query = $this->db->prepare("SELECT COUNT(*) AS total_count FROM themes WHERE status = 1");
         $query->execute();
         
         $data = $query->fetch(FETCH_MODE);
