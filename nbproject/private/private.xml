@@ -9,17 +9,22 @@
             <file>file:/Users/ballosv/_git_projects/commentr/views/theme/show_themes.php</file>
             <file>file:/Users/ballosv/_git_projects/commentr/views/theme/partials/opinions.php</file>
         </group>
-        <group name="commentr">
-            <file>file:/Users/ballosv/_git_projects/commentr/controllers/Index.php</file>
-            <file>file:/Users/ballosv/_git_projects/commentr/controllers/Admin.php</file>
-            <file>file:/Users/ballosv/_git_projects/commentr/sql/snippets.sql</file>
-            <file>file:/Users/ballosv/_git_projects/commentr/config.php</file>
-            <file>file:/Users/ballosv/_git_projects/commentr/views/index/index.php</file>
-            <file>file:/Users/ballosv/_git_projects/commentr/libs/Model.php</file>
-        </group>
         <group>
             <file>file:/C:/Users/Bassels/Documents/GitHub/commentr/index.php</file>
             <file>file:/C:/Users/Bassels/Documents/GitHub/commentr/config.php</file>
+        </group>
+        <group name="commentr">
+            <file>file:/Users/ballosv/_git_projects/commentr/controllers/Index.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/views/theme/themes_list.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/controllers/Admin.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/sql/snippets.sql</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/libs/Bootstrap.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/config.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/views/index/index.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/controllers/Theme.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/libs/Model.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/views/theme/show_theme.php</file>
+            <file>file:/Users/ballosv/_git_projects/commentr/libs/Url.php</file>
         </group>
     </open-files>
 </project-private>

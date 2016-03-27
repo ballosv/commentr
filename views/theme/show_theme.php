@@ -18,14 +18,15 @@ $likes = $this->getViewData('likes');
 ?>
 <h1><?= $theme['name']; ?></h1>
 <p><?= $theme['teaser']; ?></p>
-<div id="filter">
-    <p>Anzeige pro Seite: </p>
+<nav id="theme-menu">
+    <h4>Anzeige pro Seite: </h4>
     <ul>
         <li><a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . '?pgn=1&ldc=5'; ?>">5</a></li>
         <li><a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . '?pgn=1&ldc=10'; ?>">10</a></li>
         <li><a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . '?pgn=1&ldc=20'; ?>">20</a></li>
     </ul>
-</div>
+    <a href="<?= BASE_URL . '/theme/themes-list?pgn=1&sort=relevance'; ?>">alle Themen</a>
+</nav>
 <ul id="topics">
     <?php foreach ($topics as $topic): ?>
     <li class="topic">

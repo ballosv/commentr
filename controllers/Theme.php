@@ -137,7 +137,7 @@ class Theme extends Controller {
         /*
          * Es muss die Anzahl Themen geladen werden - funktioniert noch nicht!!!!!!!!!
          */
-        $themes = $this->model->getThemesByRelevance($totalPages*INITIAL_LOAD_COUNT);
+        $themes = $this->model->getThemesByRelevance($currentPage*INITIAL_LOAD_COUNT);
         
         
         $this->view->setViewData('themes', $themes);

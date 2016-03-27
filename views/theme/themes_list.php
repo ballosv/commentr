@@ -7,6 +7,17 @@ $prevPage = ($currentPage - 1) > 0 ? $currentPage - 1 : $currentPage;
 $nextPage = ($currentPage + 1) > $totalPages ? $currentPage : $currentPage + 1;
 ?>
 <h2>Themenliste</h2>
+<div id="theme-filter">
+    <h4>Sortieren:</h4>
+    <ul>
+        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=1&sort=relevance'; ?>">Aktualität</a></li>
+        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=1&sort=new'; ?>">Datum</a></li>
+        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=1&sort=topics'; ?>">Anzahl Topics</a></li>
+        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=1&sort=opinions'; ?>">Anzahl Meinungen</a></li>
+        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=1&sort=comments'; ?>">Anzahl Kommentare</a></li>
+        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=1&sort=last-update'; ?>">Zuletzt aktualisiert</a></li>
+    </ul>
+</div>
 <div class="theme-list">
     <ul>
         <?php foreach ($themes as $theme): ?>
