@@ -109,12 +109,36 @@ class Url {
         return BASE_URL . DIRECTORY_SEPARATOR . self::getController() . DIRECTORY_SEPARATOR . self::getMethod() . $params;
     }
     
+    public function urlParser(){
+        $get = array();
+        foreach ($_GET as $key => $val){
+            $get[$key] = filter_input(INPUT_GET, $key);
+        }
+        
+        $url = $get['url'];
+        // URL verarbeitung
+        unset($get['url']);
+        
+        
+        
+        
+    }
+    
     public static function parseUrl(){
-        $url = filter_input(INPUT_GET, 'url', FILTER_SANITIZE_STRING);
-        $pgn = filter_input(INPUT_GET, 'pgn', FILTER_SANITIZE_STRING);
-        $ldc = filter_input(INPUT_GET, 'ldc', FILTER_SANITIZE_STRING);
-        $com = filter_input(INPUT_GET, 'com', FILTER_SANITIZE_STRING);
-        $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_STRING);
+//        $url = filter_input(INPUT_GET, 'url', FILTER_SANITIZE_STRING);
+//        $pgn = filter_input(INPUT_GET, 'pgn', FILTER_SANITIZE_STRING);
+//        $ldc = filter_input(INPUT_GET, 'ldc', FILTER_SANITIZE_STRING);
+//        $com = filter_input(INPUT_GET, 'com', FILTER_SANITIZE_STRING);
+//        $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_STRING);
+        
+        $get = array();
+        foreach ($_GET as $key => $val){
+            $get[$key] = filter_input(INPUT_GET, $key);
+        }
+        
+        $url = $get['url'];
+        unset($get['url']);
+        
         // Prüfen ob ob URL-Parameter übergeben wurde
         if ($url) {
             // Letztes Slash aus der URL entfernen
@@ -142,25 +166,27 @@ class Url {
             }
             self::setParams($params);
             
-            $subParams;
-
-            if(!empty($pgn)){
-                $subParams['pgn'] = $pgn;
-            }
+            self::setSubParams($get);
             
-            if(!empty($ldc)){
-                $subParams['ldc'] = $ldc;
-            }
-            
-            if(!empty($com)){
-                $subParams['com'] = $com;
-            }
-            
-            if(!empty($id)){
-                $subParams['id'] = $id;
-            }
-            
-            self::setSubParams($subParams);
+//            $subParams;
+//
+//            if(!empty($pgn)){
+//                $subParams['pgn'] = $pgn;
+//            }
+//            
+//            if(!empty($ldc)){
+//                $subParams['ldc'] = $ldc;
+//            }
+//            
+//            if(!empty($com)){
+//                $subParams['com'] = $com;
+//            }
+//            
+//            if(!empty($id)){
+//                $subParams['id'] = $id;
+//            }
+//            
+//            self::setSubParams($subParams);
         }
     }
     

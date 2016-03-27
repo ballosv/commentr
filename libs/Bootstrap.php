@@ -10,6 +10,7 @@ class Bootstrap {
         // Eine Session starten, damit sie überall verfügbar ist
         Session::init();
         Url::parseUrl();
+        Url::urlParser();
         $this->controller = Url::getController();
         $this->method = Url::getMethod('lcc');
         $this->params = Url::getParams();
