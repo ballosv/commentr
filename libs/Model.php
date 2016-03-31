@@ -13,6 +13,52 @@ class Model {
      * Themes
      */
     
+//    public function getThemes(
+//            $sort = 'relevance', 
+//            array $themeId = array('id' => '', 'link' => ''), 
+//            $fields = array('*'), 
+//            array $count = array('min_count' => '' , 'max_count' => '')){
+//        
+//        Debug::addMsg('Themen laden');
+//        // Queries erstellen
+//
+//        // SELECT
+//        $select = 'SELECT ';
+//        foreach ($fields as $field){
+//            $selectFields .= $field . ', ';
+//        }
+//        
+//        $selectFields = rtrim($selectFields, ', ');
+//        
+//        $from = ' FROM themes';
+//        
+//        // WHERE
+//        if(!empty($themeId['id'])){
+//            $where = ' WHERE id = ' . $themeId['id'];
+//        }
+//        
+//        if(!empty($themeId['link'])){
+//            $where = ' WHERE link = ' . $themeId['link'];
+//        }
+//                
+//        // LIMIT
+//        if($count['min_count'] != '' && $count['max_count'] != ''){
+//            
+//            $limit = ' LIMIT ' . $count['min_count'] . ', ' . $count['max_count'];
+//        }
+//        
+//        // Query zusammenbauen
+//        $query = $select . $selectFields . $from . $join . $where . $group . $order . $limit;
+//        
+//        var_dump($query);
+//        
+//        // sort 
+//        
+//        // themeId = Where
+//        
+//        // Counts = Limit
+//    }
+    
     public function getAllThemes(){
         Debug::addMsg('Alle Themen werden geladen');
         $query = $this->db->prepare("SELECT * FROM themes WHERE parent = 0 AND status = 1");
@@ -26,6 +72,10 @@ class Model {
             return $data;
         }
     }
+    
+//    public function getThemesBySort($sort = 'relevance'){
+//        
+//    }
     
     
     public function getThemesByCount($minCount = NULL, $maxCount = NULL){
@@ -159,26 +209,42 @@ class Model {
         
     }
     
-    public function getThemeIdsByRelevance($count = 1){
+    public function getThemesBySort($sort = 'level_count', $count = 1){
         $query = $this->db->prepare("
             SELECT
+            themes.id,
             themes.id AS theme_id,
-            ((COUNT(topics.theme_id) * 15) + topics.date/100000000000) AS topic_count,
-            ((COUNT(opinions.topic_id) * 10) + opinions.date/100000000000) AS opinion_count,
-            ((COUNT(comments.opinion_id) * 1) + IFNULL(comments.date, 0)/100000000000) AS comments_count,
+            themes.link,
+            themes.name,
+            themes.teaser,
+            themes.date,
+            themes.image,
+            themes.status,
+            COUNT(DISTINCT topics.id) AS topics_count,
+            COUNT(DISTINCT opinions.id) AS opinions_count,
+            COUNT(DISTINCT comments.id) AS comments_count,
+            IFNULL(SUM(IF(:topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac) < 0, 0, :topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac))), 0) AS topic_level,
+            IFNULL(SUM(IF(:opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac) < 0, 0, :opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac))), 0) AS opinion_level,
+            IFNULL(SUM(IF(:comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac) < 0, 0, :comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac))), 0) AS comment_level,
             (
-                ((COUNT(topics.theme_id) * 15) + topics.date/100000000000) +
-                ((COUNT(opinions.topic_id) * 10) + opinions.date/100000000000) +
-                    ((COUNT(comments.opinion_id) * 1) + IFNULL(comments.date, 0)/100000000000)
-            ) AS theme_level
-            FROM topics
-            LEFT JOIN themes ON themes.id = topics.theme_id
+                    IFNULL(SUM(IF(:topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac) < 0, 0, :topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac))), 0) +
+                    IFNULL(SUM(IF(:opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac) < 0, 0, :opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac))), 0) +
+                    IFNULL(SUM(IF(:comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac) < 0, 0, :comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac))), 0) 
+            ) AS level_count
+            FROM themes
+            JOIN topics ON themes.id = topics.theme_id
             LEFT JOIN opinions ON topics.id = opinions.topic_id
             LEFT JOIN comments ON opinions.id = comments.opinion_id
             GROUP BY themes.id
+            ORDER BY $sort DESC
             LIMIT $count
                 ");
-        $query->execute();
+        $query->execute(array(
+            ':time_fac' => TIME_FACTOR,
+            ':topic_fac' => TOPIC_FACTOR,
+            ':opinion_fac' => OPINION_FACTOR,
+            ':comment_fac' => COMMENT_FACTOR
+        ));
         
         $data = $query->fetchAll(FETCH_MODE);
         $count = $query->rowCount();
@@ -192,7 +258,17 @@ class Model {
         }
         
         return false;
-        
+    }
+    
+    public function themeUpdateLastUpdate($themeLink){
+        // Theme aktualisieren
+        $currentTime = time();
+        // Anzahl Kommentare erhöhen
+        $query = $this->db->prepare("UPDATE themes SET last_update = FROM_UNIXTIME(:time) WHERE link = :link");
+        $save = $query->execute(array(
+            ':time' => $currentTime,
+            ':link' => $themeLink
+        ));
     }
     
     

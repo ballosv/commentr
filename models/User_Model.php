@@ -7,7 +7,7 @@ class User_Model extends Model {
         Debug::addMsg('User_Model wurde geladen');
     }
     
-    public function createNewOpinion($theme_link){
+    public function createNewOpinion($themeLink){
         
         Debug::addMsg('Neue Meinung wird gespeichert');
         $title = filter_input(INPUT_POST, 'opinion-title', FILTER_SANITIZE_STRING);
@@ -21,7 +21,6 @@ class User_Model extends Model {
             /*
              * START Queries
              */
-            
             // Meinung speichern
             $query = $this->db->prepare("INSERT INTO opinions (topic_id, user_id, title, text, status) VALUES (:topic_id, :user_id, :title, :text, :status)");
             $save = $query->execute(array(
@@ -31,6 +30,9 @@ class User_Model extends Model {
                 ':text' => $text,
                 ':status' => 1
             ));
+            
+            // Theme last_update aktualisieren
+            parent::themeUpdateLastUpdate($themeLink);
             
             /*
              * END Queries
@@ -47,7 +49,7 @@ class User_Model extends Model {
         
     }
     
-    public function createNewComment($opinionId){
+    public function createNewComment($themeLink, $opinionId){
         Debug::addMsg('Neuer Kommentar wird gespeichert');
         $title = filter_input(INPUT_POST, 'comment-title', FILTER_SANITIZE_STRING);
         $text = filter_input(INPUT_POST, 'comment-text', FILTER_SANITIZE_STRING);
@@ -71,6 +73,9 @@ class User_Model extends Model {
             
             // Die zuletzt gespeicherte ID
 //            $lastId = $this->db->lastInsertId();
+            
+            // Theme last_update aktualisieren
+            parent::themeUpdateLastUpdate($themeLink);
             
             // Anzahl Kommentare erhöhen
             $query = $this->db->prepare("UPDATE opinions SET comments = comments+1 WHERE id = :opinion_id");

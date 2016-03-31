@@ -9,7 +9,7 @@
             <p class="dislike"><span class="count"><?= $likes[$opinion['id']]['dislikes'] !== NULL ? $likes[$opinion['id']]['dislikes'] : 0; ?> </span><a href="<?= BASE_URL . '/user/dislike/' . $topic['link'] . DIRECTORY_SEPARATOR . $opinion['id']; ?>">Ablehnen</a></p>
         </div>
         <p>Anzahl Kommentare: <?= $opinion['comments']; ?></p>
-        <a href="<?= BASE_URL . '/user/new-comment/' . $topic['link'] . DIRECTORY_SEPARATOR . $opinion['id']; ?>">Kommentieren</a>
+        <a href="<?= BASE_URL . '/user/new-comment/' . $theme['link'] . DIRECTORY_SEPARATOR . $topic['link'] . DIRECTORY_SEPARATOR . $opinion['id']; ?>">Kommentieren</a>
         <?php if($opinion['comments'] > 0): ?>
         <a href="<?= BASE_URL . '/theme/show-theme/' . $theme['link'] . DIRECTORY_SEPARATOR . $topic['link'] . '?id=' . $topic['id'] . '&pgn=' . $currentPage . '&com=' . $opinion['id']; ?>">load comments</a>
         <?php endif; ?>
