@@ -10,12 +10,12 @@ $nextPage = ($currentPage + 1) > $totalPages ? $currentPage : $currentPage + 1;
 <div id="theme-filter">
     <h4>Sortieren:</h4>
     <ul>
-        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=1&sort=relevance'; ?>">Aktualität</a></li>
-        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=1&sort=new'; ?>">Datum</a></li>
-        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=1&sort=topics'; ?>">Anzahl Topics</a></li>
-        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=1&sort=opinions'; ?>">Anzahl Meinungen</a></li>
-        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=1&sort=comments'; ?>">Anzahl Kommentare</a></li>
-        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=1&sort=last-update'; ?>">Zuletzt aktualisiert</a></li>
+        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=' . $currentPage . '&sort=relevance'; ?>">Aktualität</a></li>
+        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=' . $currentPage . '&sort=new'; ?>">Datum</a></li>
+        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=' . $currentPage . '&sort=topics'; ?>">Topics</a></li>
+        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=' . $currentPage . '&sort=opinions'; ?>">Meinungen</a></li>
+        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=' . $currentPage . '&sort=comments'; ?>">Kommentare</a></li>
+        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=' . $currentPage . '&sort=last-update'; ?>">Letzte Aktivität</a></li>
     </ul>
 </div>
 <div class="theme-list">
@@ -26,7 +26,8 @@ $nextPage = ($currentPage + 1) > $totalPages ? $currentPage : $currentPage + 1;
             <p><?= $theme['teaser']; ?></p>
             <?php if(DEBUG_MODE): ?>
             <p><?= $theme['level_count']; ?></p>
-            <p>Topics: <?= $theme['topic_level']; ?></p>
+            <p>Topics: <?= $theme['topics_count']; ?></p>
+            <p>Topic-Punkte: <?= $theme['topic_level']; ?></p>
             <p>Meinungen: <?= $theme['opinion_level']; ?></p>
             <p>Kommentare: <?= $theme['comment_level']; ?></p>
             <?php endif; ?>
@@ -36,13 +37,13 @@ $nextPage = ($currentPage + 1) > $totalPages ? $currentPage : $currentPage + 1;
     </ul>
     <?php if($totalPages > 1): ?>
     <?php if($prevPage != $currentPage): ?>
-    <a href="<?= BASE_URL . '/theme/themes-list?pgn=' . $prevPage; ?>">zurück</a>
+    <a href="<?= BASE_URL . '/theme/themes-list?pgn=' . $prevPage . '&sort=' . Url::getSubParams()['sort']; ?>">zurück</a>
     <?php endif; ?>
     <?php for ($i = 1 ; $i <= $totalPages ; $i++): ?>
-    <a href="<?= BASE_URL . '/theme/themes-list?pgn=' . $i; ?>"><?= $i; ?></a>
+    <a href="<?= BASE_URL . '/theme/themes-list?pgn=' . $i . '&sort=' . Url::getSubParams()['sort']; ?>"><?= $i; ?></a>
     <?php endfor; ?>
     <?php if($nextPage > $currentPage): ?>
-    <a href="<?= BASE_URL . '/theme/themes-list?pgn=' . $nextPage; ?>">weiter</a>
+    <a href="<?= BASE_URL . '/theme/themes-list?pgn=' . $nextPage . '&sort=' . Url::getSubParams()['sort']; ?>">weiter</a>
     <?php endif; ?>
     <?php endif; ?>
 </div>

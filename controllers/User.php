@@ -22,9 +22,11 @@ class User extends Controller {
     public function newOpinion($params){
 //        $this->view->setViewData('theme_link', $params[0]);
 //        $this->view->setViewData('topic_link', $params[1]);
-        $themeId = $this->model->getThemeByLink($params[0])['id'];
+        $theme = $this->model->getThemeByLink($params[0]);
 //        $topic = $this->model->getTopicByLink($params[1], $themeId);
         $topic = $this->model->getTopicById(Url::getSubParams()['id']);
+        
+        $this->view->setViewData('theme_link', $theme['link']);
         $this->view->setViewData('topic_id', $topic['id']);
 
         $this->setViewFile('new_opinion');
@@ -41,14 +43,15 @@ class User extends Controller {
     }
     
     public function newComment($params){
-        $this->view->setViewData('topic_link', $params[0]);
-        $this->view->setViewData('opinion_id', $params[1]);
+        $this->view->setViewData('theme_link', $params[0]);
+        $this->view->setViewData('topic_link', $params[1]);
+        $this->view->setViewData('opinion_id', $params[2]);
         $this->setViewFile('new_comment');
     }
     
     public function createNewComment($params){
         Debug::addMsg('Neuer Kommentar wird erstellt.');
-        $saveComment = $this->model->createNewComment($params[1]);
+        $saveComment = $this->model->createNewComment($params[0], $params[2]);
         
         if($saveComment === true){
             header('Location: ' . Url::getTempUrl('theme_page'));

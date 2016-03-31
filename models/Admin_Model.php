@@ -173,7 +173,14 @@ Debug::addMsg('Thema wird aktiviert');
                     ':image' => $topicImage,
                     ':status' => 1
                 ));
+                
+                $query = $this->db->prepare("SELECT link FROM themes WHERE id = $topicParent");
+                $select = $query->execute();
+                $themeLink = $query->fetch(FETCH_MODE);
 
+                // Theme last_update aktualisieren
+                parent::themeUpdateLastUpdate($themeLink['link']);
+                
                 /*
                  * END Queries
                  */
