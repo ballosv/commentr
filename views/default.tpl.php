@@ -36,8 +36,10 @@
                     </ul>
                 </nav>
                 <div>
-                    <form id="search-form" method="POST" action="<?= BASE_URL; ?>/theme/themes-list?pgn=1&sort=relevance">
+                    <form id="search-form" method="GET" action="<?= BASE_URL; ?>/theme/themes-list">
                         <input type="text" name="search" placeholder="Wonach suchen Sie" />
+                        <input type="hidden" name="pgn" value="1" />
+                        <input type="hidden" name="sort" value="relevance" />
                         <input type="submit" value="Suchen" />
                     </form>
                 </div>

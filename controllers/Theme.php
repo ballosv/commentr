@@ -123,15 +123,13 @@ class Theme extends Controller {
     }
     
     public function themesList(){
+        $search = isset(Url::getSubParams()['search']) ? Url::getSubParams()['search'] : NULL;
+        if($search !== NULL){
+            $this->view->setViewData('search', $search);
+        }
         $currentPage = isset(Url::getSubParams()['pgn']) ? Url::getSubParams()['pgn'] : 1;
         $pageCount = isset(Url::getSubParams()['ldc']) ? Url::getSubParams()['ldc'] : INITIAL_LOAD_COUNT;
-        
-//        $this->model->getThemes('relevance', array('id' => '1'), array('id', 'name', 'link'), array('min_count' => '0', 'max_count' => '5'));
-        
-        
-        
         $sort = isset(Url::getSubParams()['sort']) ? Url::getSubParams()['sort'] : 'relevance';
-        
         
         
         /*
@@ -147,25 +145,25 @@ class Theme extends Controller {
          */
         switch ($sort){
             case 'relevance':
-                $themes = $this->model->getThemesBySort('level_count', $currentPage*INITIAL_LOAD_COUNT);
+                $themes = $this->model->getThemesBySort('level_count', $currentPage*INITIAL_LOAD_COUNT, $search);
                 break;
             case 'new':
-                $themes = $this->model->getThemesByCount(0, $currentPage*INITIAL_LOAD_COUNT);
+                $themes = $this->model->getThemesByCount(0, $currentPage*INITIAL_LOAD_COUNT, $search);
                 break;
             case 'topics':
-                $themes = $this->model->getThemesBySort('topics_count', $currentPage*INITIAL_LOAD_COUNT);
+                $themes = $this->model->getThemesBySort('topics_count', $currentPage*INITIAL_LOAD_COUNT, $search);
                 break;
             case 'opinions':
-                $themes = $this->model->getThemesBySort('opinions_count', $currentPage*INITIAL_LOAD_COUNT);
+                $themes = $this->model->getThemesBySort('opinions_count', $currentPage*INITIAL_LOAD_COUNT, $search);
                 break;
             case 'comments':
-                $themes = $this->model->getThemesBySort('comments_count', $currentPage*INITIAL_LOAD_COUNT);
+                $themes = $this->model->getThemesBySort('comments_count', $currentPage*INITIAL_LOAD_COUNT, $search);
                 break;
             case 'last-update':
-                $themes = $this->model->getThemesBySort('last_update', $currentPage*INITIAL_LOAD_COUNT);
+                $themes = $this->model->getThemesBySort('last_update', $currentPage*INITIAL_LOAD_COUNT, $search);
                 break;
             default:
-                $themes = $this->model->getThemesByRelevance($currentPage*INITIAL_LOAD_COUNT);
+                $themes = $this->model->getThemesBySort('level_count', $currentPage*INITIAL_LOAD_COUNT, $search);
                 break;
         }
         

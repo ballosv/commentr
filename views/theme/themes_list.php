@@ -1,21 +1,21 @@
 <?php 
 $themes = $this->getViewData('themes');
-
 $currentPage = $this->getViewData('current_page');
 $totalPages = $this->getViewData('total_pages');
 $prevPage = ($currentPage - 1) > 0 ? $currentPage - 1 : $currentPage;
 $nextPage = ($currentPage + 1) > $totalPages ? $currentPage : $currentPage + 1;
+$search = !empty($this->getViewData('search')) ? 'search=' . $this->getViewData('search') . '&' : '';
 ?>
 <h2>Themenliste</h2>
 <div id="theme-filter">
     <h4>Sortieren:</h4>
     <ul>
-        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=' . $currentPage . '&sort=relevance'; ?>">Aktualität</a></li>
-        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=' . $currentPage . '&sort=new'; ?>">Datum</a></li>
-        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=' . $currentPage . '&sort=topics'; ?>">Topics</a></li>
-        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=' . $currentPage . '&sort=opinions'; ?>">Meinungen</a></li>
-        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=' . $currentPage . '&sort=comments'; ?>">Kommentare</a></li>
-        <li><a href="<?= BASE_URL . '/theme/themes-list?pgn=' . $currentPage . '&sort=last-update'; ?>">Letzte Aktivität</a></li>
+        <li><a href="<?= BASE_URL . '/theme/themes-list?' . $search . 'pgn=' . $currentPage . '&sort=relevance'; ?>">Aktualität</a></li>
+        <li><a href="<?= BASE_URL . '/theme/themes-list?' . $search . 'pgn=' . $currentPage . '&sort=new'; ?>">Datum</a></li>
+        <li><a href="<?= BASE_URL . '/theme/themes-list?' . $search . 'pgn=' . $currentPage . '&sort=topics'; ?>">Topics</a></li>
+        <li><a href="<?= BASE_URL . '/theme/themes-list?' . $search . 'pgn=' . $currentPage . '&sort=opinions'; ?>">Meinungen</a></li>
+        <li><a href="<?= BASE_URL . '/theme/themes-list?' . $search . 'pgn=' . $currentPage . '&sort=comments'; ?>">Kommentare</a></li>
+        <li><a href="<?= BASE_URL . '/theme/themes-list?' . $search . 'pgn=' . $currentPage . '&sort=last-update'; ?>">Letzte Aktivität</a></li>
     </ul>
 </div>
 <div class="theme-list">
