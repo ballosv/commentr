@@ -209,8 +209,8 @@ class Model {
         
     }
     
-    public function getThemesBySort($sort = 'level_count', $count = 1){
-        $query = $this->db->prepare("
+    public function getThemesBySort($sort = 'level_count', $count = 1, $search){        
+        $select = "
             SELECT
             themes.id,
             themes.id AS theme_id,
@@ -231,14 +231,53 @@ class Model {
                     IFNULL(SUM(IF(:opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac) < 0, 0, :opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac))), 0) +
                     IFNULL(SUM(IF(:comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac) < 0, 0, :comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac))), 0) 
             ) AS level_count
-            FROM themes
+            FROM themes 
             JOIN topics ON themes.id = topics.theme_id
             LEFT JOIN opinions ON topics.id = opinions.topic_id
-            LEFT JOIN comments ON opinions.id = comments.opinion_id
+            LEFT JOIN comments ON opinions.id = comments.opinion_id ";
+        
+        if($search !== NULL){
+            $search = "WHERE themes.name LIKE '%$search%' ";
+        }
+        
+        $order = "
             GROUP BY themes.id
             ORDER BY $sort DESC
-            LIMIT $count
-                ");
+            LIMIT $count";
+        
+        $query = $select . $search . $order;
+        
+        $query = $this->db->prepare($query);
+
+//        $query = $this->db->prepare("
+//            SELECT
+//            themes.id,
+//            themes.id AS theme_id,
+//            themes.link,
+//            themes.name,
+//            themes.teaser,
+//            themes.date,
+//            themes.image,
+//            themes.status,
+//            COUNT(DISTINCT topics.id) AS topics_count,
+//            COUNT(DISTINCT opinions.id) AS opinions_count,
+//            COUNT(DISTINCT comments.id) AS comments_count,
+//            IFNULL(SUM(IF(:topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac) < 0, 0, :topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac))), 0) AS topic_level,
+//            IFNULL(SUM(IF(:opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac) < 0, 0, :opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac))), 0) AS opinion_level,
+//            IFNULL(SUM(IF(:comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac) < 0, 0, :comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac))), 0) AS comment_level,
+//            (
+//                    IFNULL(SUM(IF(:topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac) < 0, 0, :topic_fac - (DATEDIFF(CURRENT_DATE, DATE(topics.date))/:time_fac))), 0) +
+//                    IFNULL(SUM(IF(:opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac) < 0, 0, :opinion_fac - (DATEDIFF(CURRENT_DATE, DATE(opinions.date))/:time_fac))), 0) +
+//                    IFNULL(SUM(IF(:comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac) < 0, 0, :comment_fac - (DATEDIFF(CURRENT_DATE, DATE(comments.date))/:time_fac))), 0) 
+//            ) AS level_count
+//            FROM themes
+//            JOIN topics ON themes.id = topics.theme_id
+//            LEFT JOIN opinions ON topics.id = opinions.topic_id
+//            LEFT JOIN comments ON opinions.id = comments.opinion_id
+//            GROUP BY themes.id
+//            ORDER BY $sort DESC
+//            LIMIT $count
+//                ");
         $query->execute(array(
             ':time_fac' => TIME_FACTOR,
             ':topic_fac' => TOPIC_FACTOR,
@@ -250,11 +289,12 @@ class Model {
         $count = $query->rowCount();
         
         if($data){
-            if($count > 1){
-                return $data;
-            }else{
-                return $data[0];
-            }
+            return $data;
+//            if($count > 1){
+//                return $data;
+//            }else{
+//                return $data[0];
+//            }
         }
         
         return false;
