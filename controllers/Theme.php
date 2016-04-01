@@ -148,7 +148,7 @@ class Theme extends Controller {
                 $themes = $this->model->getThemesBySort('level_count', $currentPage*INITIAL_LOAD_COUNT, $search);
                 break;
             case 'new':
-                $themes = $this->model->getThemesByCount(0, $currentPage*INITIAL_LOAD_COUNT, $search);
+                $themes = $this->model->getNewThemesByCount(0, $currentPage*INITIAL_LOAD_COUNT, $search);
                 break;
             case 'topics':
                 $themes = $this->model->getThemesBySort('topics_count', $currentPage*INITIAL_LOAD_COUNT, $search);

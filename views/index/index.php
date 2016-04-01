@@ -28,13 +28,13 @@ $loadCount = (count($themes) + DEFAULT_LOAD_COUNT) > $totalCount ? $totalCount :
                 <p>Meinungen: <?= $topTheme['opinion_level']; ?></p>
                 <p>Kommentare: <?= $topTheme['comment_level']; ?></p>
                 <?php endif; ?>
-                <a href="<?= BASE_URL . '/theme/show-theme/' . $topTheme['link'] . '?pgn=1'; ?>">Anzeigen</a>
+                <a href="<?= BASE_URL . '/theme/show-theme/' . $topTheme['link'] . '?pgn=1&sort=relevance'; ?>">Anzeigen</a>
             </li>
             <?php endforeach; ?>
         </ul>
     </div>
     <?php if(count($themes) != $loadCount): ?>
-    <a href="<?= BASE_URL . '/theme/themes-list?pgn=1'; ?>">Show more</a>
+    <a href="<?= BASE_URL . '/theme/themes-list?pgn=1&sort=relevance'; ?>">Show more</a>
     <?php endif; ?>
 </div>
 <div id="last-themes">
@@ -50,7 +50,7 @@ $loadCount = (count($themes) + DEFAULT_LOAD_COUNT) > $totalCount ? $totalCount :
             <?php endforeach; ?>
         </ul>
         <?php if(count($themes) != $loadCount): ?>
-        <a href="<?= BASE_URL . '/theme/themes-list?pgn=1'; ?>">Show more</a>
+        <a href="<?= BASE_URL . '/theme/themes-list?pgn=1&sort=new'; ?>">Show more</a>
         <?php endif; ?>
     </div>
 </div>    

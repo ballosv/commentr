@@ -46,10 +46,10 @@ Debug::addMsg('index Controller');
         $totalCount = $this->model->getTotalThemeCount()['total_count'];
         $this->view->setViewData('total_theme_count', $totalCount);
         
-        // Anzahl zu ladener Themen auf Anzahl vorhandener Themen beschrenken
+        // Anzahl zu ladender Themen auf Anzahl vorhandener Themen beschrenken
         $maxCount = $totalCount >= $maxCount ? $maxCount : $totalCount;
         
-        $this->view->setViewData('themes', $this->model->getThemesByCount($minCount, $maxCount));
+        $this->view->setViewData('themes', $this->model->getNewThemesByCount($minCount, $maxCount));
     }
     
 
