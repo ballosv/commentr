@@ -61,7 +61,7 @@ class Model {
     
     public function getAllThemes(){
         Debug::addMsg('Alle Themen werden geladen');
-        $query = $this->db->prepare("SELECT * FROM themes WHERE parent = 0 AND status = 1");
+        $query = $this->db->prepare("SELECT * FROM themes WHERE status = 1");
         $query->execute();
         
         $data = $query->fetchAll(FETCH_MODE);
@@ -78,18 +78,23 @@ class Model {
 //    }
     
     
-    public function getThemesByCount($minCount = NULL, $maxCount = NULL){
+    public function getNewThemesByCount($minCount = NULL, $maxCount = NULL, $search = NULL){
         Debug::addMsg('Themen werden nachgeladen');
-        if($minCount === NULL || $maxCount === NULL){
-            $query = $this->db->prepare("SELECT * FROM themes WHERE parent = 0 AND status = 1");
-            $query->execute();
-        }else{
-            $query = $this->db->prepare("SELECT * FROM themes WHERE parent = 0 AND status = 1 ORDER BY date DESC LIMIT $minCount, $maxCount");
-            $query->execute(array(
-                ':min_count' => $minCount,
-                ':max_count' => $maxCount
-            ));
-        }
+        
+        $select = 'SELECT * FROM themes ';
+        
+        $where = $search === NULL ? "WHERE status = 1 " : "WHERE status = 1 AND themes.name LIKE '%$search%' ";
+        
+        $order = "ORDER BY date DESC LIMIT $minCount, $maxCount";
+        
+        $query = $select . $where . $order;
+        
+        $query = $this->db->prepare($query);
+        $query->execute(array(
+            ':min_count' => $minCount,
+            ':max_count' => $maxCount
+        ));
+        
         
         $data = $query->fetchAll(FETCH_MODE);
         
@@ -209,7 +214,7 @@ class Model {
         
     }
     
-    public function getThemesBySort($sort = 'level_count', $count = 1, $search){        
+    public function getThemesBySort($sort = 'level_count', $count = 1, $search = NULL){        
         $select = "
             SELECT
             themes.id,
@@ -236,16 +241,14 @@ class Model {
             LEFT JOIN opinions ON topics.id = opinions.topic_id
             LEFT JOIN comments ON opinions.id = comments.opinion_id ";
         
-        if($search !== NULL){
-            $search = "WHERE themes.name LIKE '%$search%' ";
-        }
-        
+        $where = $search === NULL ? "WHERE themes.status = 1 " : "WHERE themes.status = 1 AND themes.name LIKE '%$search%' ";
+
         $order = "
             GROUP BY themes.id
             ORDER BY $sort DESC
             LIMIT $count";
         
-        $query = $select . $search . $order;
+        $query = $select . $where . $order;
         
         $query = $this->db->prepare($query);
 
